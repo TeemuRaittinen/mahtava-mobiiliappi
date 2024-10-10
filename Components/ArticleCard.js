@@ -9,7 +9,7 @@ const ArticleCard = ({ article }) => {
       ) : null}
       <Text style={styles.title}>{article.title}</Text>
       <Text style={styles.description}>{article.description}</Text>
-      
+
       <TouchableOpacity onPress={() => Linking.openURL(article.url)}>
         <Text style={styles.link}>Read Full Article</Text>
       </TouchableOpacity>
