@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ArticleCard from './ArticleCard'; 
+import ArticleCard from './ArticleCard';
 
 
 const BookmarksScreen = () => {
