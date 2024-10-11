@@ -9,6 +9,7 @@ import { enableScreens } from 'react-native-screens';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ArticleCard from './Components/ArticleCard';
 import BookmarksScreen from './Components/BookmarksScreen';
+import PushNotification from 'react-native-push-notification';
 import { REACT_APP_NEWS_API_KEY } from '@env';
 
 enableScreens();
@@ -24,11 +25,18 @@ const HomeScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Load bookmarks and fetch trending news on mount
   useEffect(() => {
+    // Load bookmarks and fetch trending news on mount
     loadBookmarks();
     fetchTrendingNews();
+
+    // Set interval to fetch trending news every 2 minutes (120000 milliseconds)
+    const newsFetchInterval = setInterval(fetchTrendingNews, 120000);
+
+    // Clear the interval when the component unmounts
+    return () => clearInterval(newsFetchInterval);
   }, []);
+
 
   const loadBookmarks = async () => {
     try {
@@ -195,3 +203,4 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
