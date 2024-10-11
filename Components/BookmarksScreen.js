@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ArticleCard from './ArticleCard';
-
 
 const BookmarksScreen = () => {
   const [bookmarkedArticles, setBookmarkedArticles] = useState([]);
@@ -22,6 +21,20 @@ const BookmarksScreen = () => {
     }
   };
 
+  const saveBookmarks = async (newBookmarks) => {
+    try {
+      await AsyncStorage.setItem('bookmarkedArticles', JSON.stringify(newBookmarks));
+    } catch (error) {
+      console.error('Error saving bookmarks:', error);
+    }
+  };
+
+  const removeBookmark = (article) => {
+    const updatedBookmarks = bookmarkedArticles.filter(a => a.url !== article.url);
+    setBookmarkedArticles(updatedBookmarks);
+    saveBookmarks(updatedBookmarks);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Bookmarked Articles</Text>
@@ -31,7 +44,12 @@ const BookmarksScreen = () => {
         <FlatList
           data={bookmarkedArticles}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => <ArticleCard article={item} />}
+          renderItem={({ item }) => (
+            <View>
+              <ArticleCard article={item} />
+              <Button title="Remove Bookmark" onPress={() => removeBookmark(item)} />
+            </View>
+          )}
         />
       )}
     </View>
