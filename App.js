@@ -3,8 +3,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { enableScreens } from 'react-native-screens';
 import HomeScreen from './Components/HomeScreen';
-import SearchResultsScreen from './Components/SearchResultsScreen'; 
+import SearchResultsScreen from './Components/SearchResultsScreen';
 import BookmarksScreen from './Components/BookmarksScreen';
+import PushNotification from 'react-native-push-notification';
 
 enableScreens();
 
@@ -23,3 +24,4 @@ const App = () => {
 };
 
 export default App;
+

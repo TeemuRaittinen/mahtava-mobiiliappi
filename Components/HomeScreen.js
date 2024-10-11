@@ -14,6 +14,15 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     fetchTrendingNews();
+
+    // Fetch trending news every 2 minutes
+    const newsFetchInterval = setInterval(fetchTrendingNews, 120000);
+
+    // Clean up interval (stop fetching news) when the component unmounts
+    return () => {
+      console.log("Clearing interval...");
+      clearInterval(newsFetchInterval);
+    };
   }, []);
 
   const fetchTrendingNews = async () => {
@@ -51,7 +60,7 @@ const HomeScreen = ({ navigation }) => {
 
       {/* Button to navigate to bookmarks */}
       <TouchableOpacity
-        onPress={() => navigation.navigate('Bookmarks')}  
+        onPress={() => navigation.navigate('Bookmarks')}
         style={styles.bookmarkButton}>
         <Text style={styles.bookmarkButtonText}>View Bookmarked Articles</Text>
       </TouchableOpacity>
@@ -87,6 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+    paddingTop: 15,
   },
   headlineText: {
     fontSize: 16,
