@@ -2,23 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, FlatList, ActivityIndicator, StyleSheet, Button } from 'react-native';
 import axios from 'axios';
 import ArticleCard from './ArticleCard';
-import { REACT_APP_NEWS_API_KEY } from '@env'; 
+import { REACT_APP_NEWS_API_KEY } from '@env';
 
 const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
 
 const SearchResultsScreen = ({ route, navigation }) => {
-  const { initialKeyword } = route.params; 
+  const { initialKeyword } = route.params;
   const [keyword, setKeyword] = useState(initialKeyword || '');
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    searchNews(); 
+    searchNews();
   }, []);
 
   const searchNews = async () => {
-    if (!keyword) return; 
+    if (!keyword) return;
     setLoading(true);
     setError('');
     try {
@@ -27,6 +27,7 @@ const SearchResultsScreen = ({ route, navigation }) => {
       );
       setArticles(response.data.articles);
     } catch (err) {
+      console.log(err); // THIS IS WEIRD!! Jos poistan tän logituksen, appi ei toimi. WTF?!
       setError('Failed to fetch news articles. Try again later.');
     }
     setLoading(false);
@@ -34,13 +35,13 @@ const SearchResultsScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-     
+
       <TextInput
         style={styles.input}
         value={keyword}
         onChangeText={text => setKeyword(text)}
         placeholder="Search for news..."
-        onSubmitEditing={searchNews} 
+        onSubmitEditing={searchNews}
       />
       <Button title="Search" onPress={searchNews} />
 

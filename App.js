@@ -5,7 +5,6 @@ import { enableScreens } from 'react-native-screens';
 import HomeScreen from './Components/HomeScreen';
 import SearchResultsScreen from './Components/SearchResultsScreen';
 import BookmarksScreen from './Components/BookmarksScreen';
-import PushNotification from 'react-native-push-notification';
 
 enableScreens();
 
@@ -16,7 +15,7 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="SearchResults" component={SearchResultsScreen} />
+        <Stack.Screen name="Search Results" component={SearchResultsScreen} />
         <Stack.Screen name="Bookmarks" component={BookmarksScreen} />
       </Stack.Navigator>
     </NavigationContainer>
