@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, TouchableWithoutFeedback, Linking } from 'react-native';
+import { View, Text, TextInput, Button, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, TouchableWithoutFeedback, Linking, Switch } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { REACT_APP_NEWS_API_KEY } from '@env';
 
 const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, theme, setTheme }) => {
   const [keyword, setKeyword] = useState('');
   const [trendingArticles, setTrendingArticles] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -20,13 +20,20 @@ const HomeScreen = ({ navigation }) => {
 
     // Fetch trending news every 2 minutes
     const newsFetchInterval = setInterval(fetchTrendingNews, 120000);
-
     // Clean up interval (stop fetching news) when the component unmounts
     return () => {
       console.log("Clearing interval...");
       clearInterval(newsFetchInterval);
     };
   }, []); // Empty array = this effect runs only on mount and unmount
+
+  const toggleTheme = async (isDarkMode) => {
+    const selectedTheme = isDarkMode ? 'dark' : 'light';
+    setTheme(selectedTheme);
+  };
+
+  // User's choice for theme
+  const isDarkMode = theme === 'dark';
 
   const fetchTrendingNews = async () => {
     setLoading(true);
@@ -97,30 +104,47 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <TouchableWithoutFeedback onPress={() => setShowDropdown(false)}>
-      <View style={styles.container}>
-        <Text style={styles.heading}>Newsapi-appi</Text>
+      <View style={[styles.container, { backgroundColor: isDarkMode ? '#333' : '#fff' }]}>
+        <Text style={[styles.heading, { color: isDarkMode ? '#fff' : '#000' }]}>Newsapi-appi</Text>
+
+        {/* Switch for dark / light theme */}
+        <View style={styles.themeSwitchContainer}>
+          <Text style={{ color: isDarkMode ? '#fff' : '#000' }}>
+            {isDarkMode ? 'Dark Mode' : 'Light Mode'}
+          </Text>
+          <Switch
+            value={isDarkMode}
+            onValueChange={toggleTheme}
+          />
+        </View>
 
         {/* Search Bar */}
         <View>
           <TextInput
-            style={styles.input}
+            style={[styles.input,
+            {
+              color: isDarkMode ? '#FFFFFF' : '#000000',
+              placeholderTextColor: isDarkMode ? '#CCCCCC' : '#808080'
+            }
+            ]}
             value={keyword}
             onFocus={() => setShowDropdown(true)}
             onChangeText={handleInputChange}
             placeholder="Search for news..."
+            placeholderTextColor={isDarkMode ? '#CCCCCC' : '#808080'}
             onSubmitEditing={searchNews}
           />
           <Button title="Search" onPress={searchNews} />
 
           {/* Dropdown for recent searches */}
           {showDropdown && recentSearches.length > 0 && (
-            <View style={styles.dropdown}>
+            <View style={[styles.dropdown, { backgroundColor: isDarkMode ? '#444' : '#fff' }]}>
               {recentSearches.map((search, index) => (
                 <TouchableOpacity
                   key={index}
                   style={styles.dropdownItem}
                   onPress={() => handleRecentSearchClick(search)}>
-                  <Text>{search}</Text>
+                  <Text style={{ color: isDarkMode ? '#fff' : '#000' }}>{search}</Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -135,15 +159,15 @@ const HomeScreen = ({ navigation }) => {
         </TouchableOpacity>
 
         {/* Trending News Section */}
-        <Text style={styles.subheading}>Trending News</Text>
-        {loading && <ActivityIndicator size="large" color="#0000ff" />}
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        <Text style={[styles.subheading, { color: isDarkMode ? '#fff' : '#000' }]}>Trending News</Text>
+        {loading && <ActivityIndicator size="large" color={isDarkMode ? '#fff' : '#0000ff'} />}
+        {error ? <Text style={[styles.errorText, { color: 'red' }]}>{error}</Text> : null}
         <FlatList
           data={trendingArticles.slice(0, 5).filter(item => item.title !== '[Removed]')}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => Linking.openURL(item.url)}>
-              <Text style={styles.headlineText}>{item.title || 'No Title Available'}</Text>
+              <Text style={[styles.headlineText, { color: isDarkMode ? '#bbb' : 'blue' }]}>{item.title || 'No Title Available'}</Text>
             </TouchableOpacity>
           )}
         />
@@ -162,6 +186,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
+  themeSwitchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
   subheading: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -171,8 +200,7 @@ const styles = StyleSheet.create({
   headlineText: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginVertical: 5,
-    color: 'blue',
+    marginVertical: 4,
   },
   input: {
     height: 40,
