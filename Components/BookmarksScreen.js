@@ -3,51 +3,71 @@ import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ArticleCard from './ArticleCard';
 
-const BookmarksScreen = () => {
-  const [bookmarkedArticles, setBookmarkedArticles] = useState([]);
+const BookmarksScreen = ({ theme }) => {
+  const [bookmarkedArticles, setBookmarkedArticles] = useState([]); // Initialize as empty array
+
+  // Determine if dark mode is active
+  const isDarkMode = theme === 'dark';
 
   useEffect(() => {
     loadBookmarks();
   }, []);
 
+  // Load bookmarks from AsyncStorage
   const loadBookmarks = async () => {
     try {
       const storedBookmarks = await AsyncStorage.getItem('bookmarkedArticles');
       if (storedBookmarks) {
         setBookmarkedArticles(JSON.parse(storedBookmarks));
+      } else {
+        setBookmarkedArticles([]); // Handle no bookmarks
       }
     } catch (error) {
       console.error('Error loading bookmarks:', error);
+      setBookmarkedArticles([]); // Ensure it's an empty array on error
     }
   };
 
+  // Save bookmarks to AsyncStorage
   const saveBookmarks = async (newBookmarks) => {
     try {
       await AsyncStorage.setItem('bookmarkedArticles', JSON.stringify(newBookmarks));
+      setBookmarkedArticles(newBookmarks);
     } catch (error) {
       console.error('Error saving bookmarks:', error);
     }
   };
 
-  const removeBookmark = (article) => {
-    const updatedBookmarks = bookmarkedArticles.filter(a => a.url !== article.url);
-    setBookmarkedArticles(updatedBookmarks);
-    saveBookmarks(updatedBookmarks);
+  // Toggle bookmark status (unbookmark an article)
+  const toggleBookmark = (article) => {
+    let updatedBookmarks = [...bookmarkedArticles];
+    if (bookmarkedArticles.some(a => a.url === article.url)) {
+      // Remove bookmark if already exists
+      updatedBookmarks = updatedBookmarks.filter(a => a.url !== article.url);
+    } else {
+      // Add bookmark if not already bookmarked 
+      updatedBookmarks.push(article);
+    }
+    saveBookmarks(updatedBookmarks);  // Persist bookmarks
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Bookmarked Articles</Text>
+    <View style={[styles.container, { backgroundColor: isDarkMode ? '#333' : '#fff' }]}>
+      <Text style={[styles.heading, { color: isDarkMode ? '#fff' : '#000' }]}>Bookmarked Articles</Text>
       {bookmarkedArticles.length === 0 ? (
-        <Text>No articles bookmarked yet.</Text>
+        <Text style={{ color: isDarkMode ? '#fff' : '#000' }}>No articles bookmarked yet.</Text>
       ) : (
         <FlatList
           data={bookmarkedArticles}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <View>
-              <ArticleCard article={item} />
-              <Button title="Remove Bookmark" onPress={() => removeBookmark(item)} />
+              {/* Pass bookmarkedArticles and toggleBookmark to ArticleCard */}
+              <ArticleCard
+                article={item}
+                bookmarkedArticles={bookmarkedArticles} // Pass current bookmarked articles
+                toggleBookmark={toggleBookmark} // Pass function to unbookmark
+              />
             </View>
           )}
         />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { enableScreens } from 'react-native-screens';
@@ -11,16 +11,25 @@ enableScreens();
 const Stack = createStackNavigator();
 
 const App = () => {
+  const [theme, setTheme] = useState();
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Search Results" component={SearchResultsScreen} />
-        <Stack.Screen name="Bookmarks" component={BookmarksScreen} />
+        {/* Pass the screen as children instead of inline component (cos that caused problems) */}
+        <Stack.Screen name="Home">
+          {props => <HomeScreen {...props} theme={theme} setTheme={setTheme} />}
+        </Stack.Screen>
+        <Stack.Screen name="Search Results">
+          {props => <SearchResultsScreen {...props} theme={theme} setTheme={setTheme} />}
+        </Stack.Screen>
+        <Stack.Screen name="Bookmarks">
+          {props => <BookmarksScreen {...props} theme={theme} setTheme={setTheme} />}
+        </Stack.Screen>
+
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
 export default App;
-

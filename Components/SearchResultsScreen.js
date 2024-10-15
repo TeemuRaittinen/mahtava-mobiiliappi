@@ -1,21 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, FlatList, ActivityIndicator, StyleSheet, Button } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import ArticleCard from './ArticleCard';
 import { REACT_APP_NEWS_API_KEY } from '@env';
 
 const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
 
-const SearchResultsScreen = ({ route, navigation }) => {
+const SearchResultsScreen = ({ route, navigation, theme }) => {
   const { initialKeyword } = route.params;
   const [keyword, setKeyword] = useState(initialKeyword || '');
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [bookmarkedArticles, setBookmarkedArticles] = useState([]);  // Initialize as empty array
 
   useEffect(() => {
     searchNews();
+    loadBookmarks();
   }, []);
+
+  // Load bookmarks from AsyncStorage
+  const loadBookmarks = async () => {
+    try {
+      const storedBookmarks = await AsyncStorage.getItem('bookmarkedArticles');
+      if (storedBookmarks) {
+        setBookmarkedArticles(JSON.parse(storedBookmarks));
+      } else {
+        // If no bookmarks are stored, initialize to empty array
+        setBookmarkedArticles([]);
+      }
+    } catch (error) {
+      console.error('Error loading bookmarks:', error);
+      setBookmarkedArticles([]);  // Ensure it's initialized to an empty array on error
+    }
+  };
+
+  // Save bookmarks to AsyncStorage
+  const saveBookmarks = async (newBookmarks) => {
+    try {
+      await AsyncStorage.setItem('bookmarkedArticles', JSON.stringify(newBookmarks));
+      setBookmarkedArticles(newBookmarks);
+    } catch (error) {
+      console.error('Error saving bookmarks:', error);
+    }
+  };
+
+  // Toggle bookmark status for an article
+  const toggleBookmark = (article) => {
+    let updatedBookmarks = [...bookmarkedArticles];
+    if (bookmarkedArticles.some(a => a.url === article.url)) {
+      // Remove bookmark if already exists
+      updatedBookmarks = updatedBookmarks.filter(a => a.url !== article.url);
+    } else {
+      // Add bookmark if not already bookmarked
+      updatedBookmarks.push(article);
+    }
+    saveBookmarks(updatedBookmarks);  // Persist bookmarks
+  };
 
   const searchNews = async () => {
     if (!keyword) return;
@@ -33,11 +75,13 @@ const SearchResultsScreen = ({ route, navigation }) => {
     setLoading(false);
   };
 
-  return (
-    <View style={styles.container}>
+  // User's choice for theme
+  const isDarkMode = theme === 'dark';
 
+  return (
+    <View style={[styles.container, { backgroundColor: isDarkMode ? '#333' : '#fff' }]}>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { color: isDarkMode ? '#fff' : '#000' }]}
         value={keyword}
         onChangeText={text => setKeyword(text)}
         placeholder="Search for news..."
@@ -56,7 +100,13 @@ const SearchResultsScreen = ({ route, navigation }) => {
         <FlatList
           data={articles}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => <ArticleCard article={item} />}
+          renderItem={({ item }) => (
+            <ArticleCard
+              article={item}
+              bookmarkedArticles={bookmarkedArticles} // Pass bookmarked articles
+              toggleBookmark={toggleBookmark} // Pass toggle bookmark function
+            />
+          )}
         />
       )}
     </View>
