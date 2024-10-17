@@ -31,7 +31,7 @@ const FilteredSearchScreen = ({ route }) => {
       },
     };
 
-    navigation.navigate('SearchResults', { initialKeyword: keyword, filters });
+    navigation.navigate('Search Results', { initialKeyword: keyword, filters });
   };
 
    // Update filters when screen is focused
