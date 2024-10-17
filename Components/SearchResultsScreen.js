@@ -8,7 +8,7 @@ import { REACT_APP_NEWS_API_KEY } from '@env';
 const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
 
 const SearchResultsScreen = ({ route, navigation, theme }) => {
-  const { initialKeyword } = route.params;
+  const { initialKeyword, filters } = route.params;
   const [keyword, setKeyword] = useState(initialKeyword || '');
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -16,9 +16,52 @@ const SearchResultsScreen = ({ route, navigation, theme }) => {
   const [bookmarkedArticles, setBookmarkedArticles] = useState([]);  // Initialize as empty array
 
   useEffect(() => {
-    searchNews();
-    loadBookmarks();
-  }, []);
+    loadBookmarks()
+    searchNews(); 
+  }, [initialKeyword, filters]);
+
+  // Fetch news from topheadlines endpoit
+  const fetchTopHeadlines = async (category, country, fromDate, toDate) => {
+    const params = new URLSearchParams({
+      apiKey: API_KEY,
+      ...(category && { category }),
+      ...(country && { country }), 
+      ...(keyword && { q: keyword }),
+      ...(fromDate && { from: fromDate }),
+      ...(toDate && { to: toDate }),
+    });
+
+    console.log('Fetching Top Headlines with params:', params.toString());
+
+    try {
+        const response = await axios.get(`https://newsapi.org/v2/top-headlines?${params.toString()}`);
+        return response.data.articles;
+    } catch (err) {
+        console.error('Top Headlines API error:', err);
+        throw err;
+    }
+};
+
+  //Fetch news from everythigendpoint
+  const fetchEverything = async (source, language, fromDate, toDate) => {
+    const params = new URLSearchParams({
+      apiKey: API_KEY,
+      ...(keyword && { q: keyword }), 
+      ...(source && { sources: source }), 
+      ...(language && { language }), 
+      ...(fromDate && { from: fromDate }), 
+      ...(toDate && { to: toDate }), 
+    });
+  
+    try {
+      const response = await axios.get(`https://newsapi.org/v2/everything?${params.toString()}`);
+      return response.data.articles;
+    } catch (err) {
+      console.error('Everything API error:', err);
+      throw err;
+    }
+  };
+
 
   // Load bookmarks from AsyncStorage
   const loadBookmarks = async () => {
@@ -59,21 +102,42 @@ const SearchResultsScreen = ({ route, navigation, theme }) => {
     saveBookmarks(updatedBookmarks);  // Persist bookmarks
   };
 
+  // Search news articles
   const searchNews = async () => {
     if (!keyword) return;
+
     setLoading(true);
     setError('');
+
+    const { filters } = route.params || {};
+    const { category, source, country, language, dateRange } = filters || {};
+    const fromDate = dateRange?.from ? dateRange.from : null;
+    const toDate = dateRange?.to ? dateRange.to : null;
+
     try {
-      const response = await axios.get(
-        `https://newsapi.org/v2/everything?q=${keyword}&apiKey=${API_KEY}`
-      );
-      setArticles(response.data.articles);
+        let articles = [];
+
+        // Fetch articles based on selected filters
+        if (source || language || keyword) {
+            articles = await fetchEverything(source, language, fromDate, toDate);
+        } else {
+            articles = await fetchTopHeadlines(category, country, fromDate, toDate);
+        }
+
+        if (articles.length === 0) {
+            setNoResults(true);
+        } else {
+            setArticles(articles);
+        }
+
     } catch (err) {
-      console.log(err); // THIS IS WEIRD!! Jos poistan tän logituksen, appi ei toimi. WTF?!
-      setError('Failed to fetch news articles. Try again later.');
+        setError('Failed to fetch news articles. Try again later.');
+        console.error('Error fetching articles:', err);
     }
+
     setLoading(false);
-  };
+};
+   
 
   // User's choice for theme
   const isDarkMode = theme === 'dark';
@@ -133,3 +197,6 @@ const styles = StyleSheet.create({
 });
 
 export default SearchResultsScreen;
+
+
+
