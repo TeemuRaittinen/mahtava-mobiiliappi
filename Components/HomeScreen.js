@@ -53,7 +53,7 @@ const HomeScreen = ({ navigation, theme, setTheme }) => {
   const searchNews = () => {
     if (!keyword) return;
     saveSearch(keyword);
-    navigation.navigate('Search Results', { initialKeyword: keyword, filters });
+    navigation.navigate('Search Results', { initialKeyword: keyword});
     setKeyword('');  // Clearing input field after search
   };
 
