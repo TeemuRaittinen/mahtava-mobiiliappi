@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, Image, Linking, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, Linking, StyleSheet, TouchableOpacity, Button } from 'react-native';
 
-const ArticleCard = ({ article }) => {
+const ArticleCard = ({ article, bookmarkedArticles, toggleBookmark }) => {
   const handlePress = async (url) => {
     try {
       await Linking.openURL(url);
@@ -21,6 +21,12 @@ const ArticleCard = ({ article }) => {
       <TouchableOpacity onPress={() => handlePress(article.url)}>
         <Text style={styles.link}>Read Full Article</Text>
       </TouchableOpacity>
+
+      {/* Bookmark Button */}
+      <Button
+        title={bookmarkedArticles.some(a => a.url === article.url) ? 'Unbookmark' : 'Bookmark'}
+        onPress={() => toggleBookmark(article)}
+      />
     </View>
   );
 };
