@@ -41,8 +41,9 @@ const HomeScreen = ({ navigation }) => {
 
   const searchNews = () => {
     if (!keyword) return;
-    navigation.navigate('SearchResults', { initialKeyword: keyword });
+    navigation.navigate('SearchResults', { initialKeyword: keyword, filters: {}});
   };
+
 
   return (
     <View style={styles.container}>
@@ -57,6 +58,13 @@ const HomeScreen = ({ navigation }) => {
         onSubmitEditing={searchNews}
       />
       <Button title="Search" onPress={searchNews} />
+
+      {/* Button to navigate to filters */}
+      <TouchableOpacity
+        onPress={() => navigation.navigate('FilteredSearch')}
+        style={styles.filterButton}>
+        <Text style={styles.filterButtonText}>Search with Filters</Text>
+      </TouchableOpacity>
 
       {/* Button to navigate to bookmarks */}
       <TouchableOpacity
@@ -114,6 +122,17 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
+  },
+  filterButton:{
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: 'blue',
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+  filterButtonText: {
+    color: 'white',
+    fontSize: 16,
   },
   bookmarkButton: {
     marginTop: 20,
