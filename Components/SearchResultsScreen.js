@@ -15,6 +15,8 @@ const SearchResultsScreen = ({ route, navigation, theme }) => {
   const [error, setError] = useState('');
   const [bookmarkedArticles, setBookmarkedArticles] = useState([]);  // Initialize as empty array
 
+  const isDarkMode = theme === 'dark';
+
   useEffect(() => {
     loadBookmarks()
     searchNews(); 
@@ -104,8 +106,6 @@ const SearchResultsScreen = ({ route, navigation, theme }) => {
 
   // Search news articles
   const searchNews = async () => {
-    if (!keyword) return;
-
     setLoading(true);
     setError('');
 
@@ -117,11 +117,11 @@ const SearchResultsScreen = ({ route, navigation, theme }) => {
     try {
         let articles = [];
 
-        // Fetch articles based on selected filters
-        if (source || language || keyword) {
-            articles = await fetchEverything(source, language, fromDate, toDate);
-        } else {
+        // Käytä top-headlines, jos kategoria on valittu, vaikka avainsanaa ei olisi
+        if (category || country) {
             articles = await fetchTopHeadlines(category, country, fromDate, toDate);
+        } else if (source || language || keyword) {
+            articles = await fetchEverything(source, language, fromDate, toDate);
         }
 
         if (articles.length === 0) {
@@ -139,9 +139,6 @@ const SearchResultsScreen = ({ route, navigation, theme }) => {
 };
    
 
-  // User's choice for theme
-  const isDarkMode = theme === 'dark';
-
   return (
     <View style={[styles.container, { backgroundColor: isDarkMode ? '#333' : '#fff' }]}>
       <TextInput
@@ -154,7 +151,7 @@ const SearchResultsScreen = ({ route, navigation, theme }) => {
       <Button title="Search" onPress={searchNews} />
 
       {/* Back Button */}
-      <Button title="Back to Home" onPress={() => navigation.goBack()} />
+      <Button title="Back to Home" onPress={() => navigation.navigate('Home')} />
 
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
