@@ -107,6 +107,12 @@ const HomeScreen = ({ navigation, theme, setTheme }) => {
       <View style={[styles.container, { backgroundColor: isDarkMode ? '#333' : '#fff' }]}>
         <Text style={[styles.heading, { color: isDarkMode ? '#fff' : '#000' }]}>Newsapi-appi</Text>
 
+
+        {/* <TouchableOpacity onPress={() => navigation.navigate('Notification Preferences')} style={styles.preferenceButton}>
+          <Text style={styles.preferenceButtonText}>Notification Preferences</Text>
+        </TouchableOpacity> */}
+
+
         {/* Switch for dark / light theme */}
         <View style={styles.themeSwitchContainer}>
           <Text style={{ color: isDarkMode ? '#fff' : '#000' }}>
@@ -167,7 +173,7 @@ const HomeScreen = ({ navigation, theme, setTheme }) => {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => Linking.openURL(item.url)}>
-              <Text style={[styles.headlineText, { color: isDarkMode ? '#bbb' : 'blue' }]}>{item.title || 'No Title Available'}</Text>
+              <Text style={[styles.headlineText, { color: isDarkMode ? '#bbb' : '#1e88e5' }]}>{item.title || 'No Title Available'}</Text>
             </TouchableOpacity>
           )}
         />
@@ -194,8 +200,8 @@ const styles = StyleSheet.create({
   subheading: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10,
-    paddingTop: 15,
+    marginBottom: 8,
+    paddingTop: 16,
   },
   headlineText: {
     fontSize: 16,
@@ -230,13 +236,27 @@ const styles = StyleSheet.create({
   bookmarkButton: {
     marginTop: 16,
     padding: 8,
-    backgroundColor: 'blue',
+    backgroundColor: '#3498db',
     alignItems: 'center',
   },
   bookmarkButtonText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 16,
   },
+
+
+  preferenceButton: {
+    marginTop: 16,
+    padding: 8,
+    backgroundColor: '#3498db',
+    alignItems: 'center',
+  },
+  preferenceButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+
+
 });
 
 export default HomeScreen;
