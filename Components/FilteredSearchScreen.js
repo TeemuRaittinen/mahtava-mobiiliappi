@@ -4,8 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
-// Clean filters, State variables for search filters
-const FilteredSearchScreen = ({ route }) => {
+const FilteredSearchScreen = ({ route, theme }) => {
   const { savedFilters } = route.params || {};
   const [keyword, setKeyword] = useState('');
   const [category, setCategory] = useState(savedFilters?.category || null);
@@ -13,10 +12,24 @@ const FilteredSearchScreen = ({ route }) => {
   const [country, setCountry] = useState(savedFilters?.country || null);
   const [language, setLanguage] = useState(savedFilters?.language || null);
   const [dateRange, setDateRange] = useState(savedFilters?.dateRange || { from: null, to: null });
-  const [showFromPicker, setShowFromPicker] = useState(false); 
-  const [showToPicker, setShowToPicker] = useState(false);   
+  const [showFromPicker, setShowFromPicker] = useState(false);
+  const [showToPicker, setShowToPicker] = useState(false);
 
   const navigation = useNavigation();
+  const isDarkMode = theme === 'dark';
+
+  // Clear search field and reset filters when screen is focused
+  useFocusEffect(
+    React.useCallback(() => {
+      setKeyword(''); // Clear search keyword
+      setCategory(savedFilters?.category || null);
+      setSource(savedFilters?.source || null);
+      setCountry(savedFilters?.country || null);
+      setLanguage(savedFilters?.language || null);
+      setDateRange(savedFilters?.dateRange || { from: null, to: null });
+      console.log("Filters reset:", { category: savedFilters?.category, source: savedFilters?.source, country: savedFilters?.country, language: savedFilters?.language }); // Debugging line
+    }, [savedFilters])
+  );
 
   // Handle search with applied filters
   const handleSearchWithFilters = () => {
@@ -34,33 +47,29 @@ const FilteredSearchScreen = ({ route }) => {
     navigation.navigate('Search Results', { initialKeyword: keyword, filters });
   };
 
-   // Update filters when screen is focused
-  useFocusEffect(
-    React.useCallback(() => {
-      setCategory(savedFilters?.category || null);
-      setSource(savedFilters?.source || null);
-      setCountry(savedFilters?.country || null);
-      setLanguage(savedFilters?.language || null);
-      setDateRange(savedFilters?.dateRange || { from: null, to: null });
-    }, [savedFilters])
-  );
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Search with Filters</Text>
+    <View style={[styles.container, { backgroundColor: isDarkMode ? '#333' : '#fff' }]}>
+      <Text style={[styles.heading, { color: isDarkMode ? '#fff' : '#000' }]}>Search with Filters</Text>
 
       {/* Input for keyword search */}
       <TextInput
-        style={styles.input}
+        style={[styles.input, { color: isDarkMode ? '#fff' : '#000', backgroundColor: isDarkMode ? '#555' : '#fff' }]}
         value={keyword}
         onChangeText={setKeyword}
         placeholder="Enter keyword"
+        placeholderTextColor={isDarkMode ? '#ccc' : '#888'}
       />
 
       {/* Category Picker */}
-      <Text style={styles.filterTitle}>Select Category</Text>
-      <Picker selectedValue={category} onValueChange={setCategory}>
-        <Picker.Item label="All" value={null} />
+      <Text style={[styles.filterTitle, { color: isDarkMode ? '#fff' : '#000' }]}>Select Category</Text>
+      <Picker
+        selectedValue={category}
+        onValueChange={(itemValue) => {
+          setCategory(itemValue === 'any' ? null : itemValue); 
+        }}
+        style={{ color: isDarkMode ? '#fff' : '#000' }}
+      >
+        <Picker.Item label="All" value="any" />
         <Picker.Item label="Business" value="business" />
         <Picker.Item label="Entertainment" value="entertainment" />
         <Picker.Item label="Health" value="health" />
@@ -70,17 +79,29 @@ const FilteredSearchScreen = ({ route }) => {
       </Picker>
 
       {/* Source Picker */}
-      <Text style={styles.filterTitle}>Select Source</Text>
-      <Picker selectedValue={source} onValueChange={setSource}>
-        <Picker.Item label="All Sources" value={null} />
+      <Text style={[styles.filterTitle, { color: isDarkMode ? '#fff' : '#000' }]}>Select Source</Text>
+      <Picker
+        selectedValue={source}
+        onValueChange={(itemValue) => {
+          setSource(itemValue === 'any' ? null : itemValue); 
+        }}
+        style={{ color: isDarkMode ? '#fff' : '#000' }}
+      >
+        <Picker.Item label="All Sources" value="any" />
         <Picker.Item label="CNN" value="cnn" />
         <Picker.Item label="BBC" value="bbc-news" />
       </Picker>
 
       {/* Country Picker */}
-      <Text style={styles.filterTitle}>Select Country</Text>
-      <Picker selectedValue={country} onValueChange={setCountry}>
-        <Picker.Item label="Any" value={null} />
+      <Text style={[styles.filterTitle, { color: isDarkMode ? '#fff' : '#000' }]}>Select Country</Text>
+      <Picker
+        selectedValue={country}
+        onValueChange={(itemValue) => {
+          setCountry(itemValue === 'any' ? null : itemValue); 
+        }}
+        style={{ color: isDarkMode ? '#fff' : '#000' }}
+      >
+        <Picker.Item label="Any" value="any" />
         <Picker.Item label="USA" value="us" />
         <Picker.Item label="UK" value="gb" />
         <Picker.Item label="Finland" value="fi" />
@@ -88,23 +109,29 @@ const FilteredSearchScreen = ({ route }) => {
       </Picker>
 
       {/* Language Picker */}
-      <Text style={styles.filterTitle}>Select Language</Text>
-      <Picker selectedValue={language} onValueChange={setLanguage}>
-        <Picker.Item label="Any" value={null} />
+      <Text style={[styles.filterTitle, { color: isDarkMode ? '#fff' : '#000' }]}>Select Language</Text>
+      <Picker
+        selectedValue={language}
+        onValueChange={(itemValue) => {
+          setLanguage(itemValue === 'any' ? null : itemValue); 
+        }}
+        style={{ color: isDarkMode ? '#fff' : '#000' }}
+      >
+        <Picker.Item label="Any" value="any" />
         <Picker.Item label="English" value="en" />
         <Picker.Item label="French" value="fr" />
         <Picker.Item label="Spanish" value="es" />
       </Picker>
 
-      {/* Select Date*/}
-      <Text style={styles.filterTitle}>Select Date Range:</Text>
+      {/* Select Date */}
+      <Text style={[styles.filterTitle, { color: isDarkMode ? '#fff' : '#000' }]}>Select Date Range:</Text>
 
-      {/*From date*/}
+      {/* From Date */}
       <TouchableOpacity
-        style={styles.dropdown}
-        onPress={() => setShowFromPicker(!showFromPicker)} 
+        style={[styles.dropdown, { backgroundColor: isDarkMode ? '#555' : '#f0f0f0' }]}
+        onPress={() => setShowFromPicker(!showFromPicker)}
       >
-        <Text style={styles.dropdownText}>
+        <Text style={[styles.dropdownText, { color: isDarkMode ? '#fff' : '#000' }]}>
           From: {dateRange.from ? dateRange.from.toDateString() : "Select Date"}
         </Text>
       </TouchableOpacity>
@@ -122,12 +149,12 @@ const FilteredSearchScreen = ({ route }) => {
         />
       )}
 
-      {/* To date */}
+      {/* To Date */}
       <TouchableOpacity
-        style={styles.dropdown}
-        onPress={() => setShowToPicker(!showToPicker)} 
+        style={[styles.dropdown, { backgroundColor: isDarkMode ? '#555' : '#f0f0f0' }]}
+        onPress={() => setShowToPicker(!showToPicker)}
       >
-        <Text style={styles.dropdownText}>
+        <Text style={[styles.dropdownText, { color: isDarkMode ? '#fff' : '#000' }]}>
           To: {dateRange.to ? dateRange.to.toDateString() : "Select Date"}
         </Text>
       </TouchableOpacity>
@@ -145,6 +172,7 @@ const FilteredSearchScreen = ({ route }) => {
         />
       )}
 
+      {/* Search Button */}
       <Button title="Search" onPress={handleSearchWithFilters} />
     </View>
   );
@@ -152,43 +180,44 @@ const FilteredSearchScreen = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 10, 
     flex: 1,
   },
   heading: {
-    fontSize: 24,
+    fontSize: 20, 
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 10, 
   },
   input: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 20,
-    paddingHorizontal: 10,
+    marginBottom: 10, 
+    paddingHorizontal: 5, 
     borderRadius: 5,
   },
   filterTitle: {
-    fontSize: 16,
+    fontSize: 14, 
     fontWeight: 'bold',
     color: '#333',
-    marginTop: 15,
+    marginTop: 10, 
   },
   dropdown: {
     height: 40,
     justifyContent: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 5, 
     backgroundColor: '#f0f0f0',
     borderRadius: 5,
-    marginBottom: 10,
+    marginBottom: 10, 
   },
   dropdownText: {
-    fontSize: 14,
+    fontSize: 12, 
     color: '#333',
   },
 });
 
 export default FilteredSearchScreen;
+
 
 
 
