@@ -8,8 +8,14 @@ import PushNotification from 'react-native-push-notification';
 import HomeScreen from './Components/HomeScreen';
 import SearchResultsScreen from './Components/SearchResultsScreen';
 import BookmarksScreen from './Components/BookmarksScreen';
+<<<<<<< HEAD
 // import NotificationPreferencesScreen from './Components/NotificationPreferencesScreen';
 import { requestUserPermission, getToken } from './NotificationService';
+=======
+import PushNotification from 'react-native-push-notification';
+import FilteredSearchScreen from './Components/FilteredSearchScreen';
+
+>>>>>>> main
 
 enableScreens();
 
@@ -63,15 +69,21 @@ const App = () => {
         <Stack.Screen name="Home">
           {props => <HomeScreen {...props} theme={theme} setTheme={setTheme} />}
         </Stack.Screen>
+         <Stack.Screen name="FilteredSearch">
+          {props => <FilteredSearchScreen {...props} theme={theme} setTheme={setTheme} />}
+        </Stack.Screen>
         <Stack.Screen name="Search Results">
           {props => <SearchResultsScreen {...props} theme={theme} setTheme={setTheme} />}
         </Stack.Screen>
         <Stack.Screen name="Bookmarks">
           {props => <BookmarksScreen {...props} theme={theme} setTheme={setTheme} />}
         </Stack.Screen>
+<<<<<<< HEAD
         {/* <Stack.Screen name="Notification Preferences">
           {props => <NotificationPreferencesScreen {...props} theme={theme} setTheme={setTheme} />}
         </Stack.Screen> */}
+=======
+>>>>>>> main
       </Stack.Navigator>
     </NavigationContainer>
   );

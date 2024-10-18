@@ -8,17 +8,62 @@ import { REACT_APP_NEWS_API_KEY } from '@env';
 const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
 
 const SearchResultsScreen = ({ route, navigation, theme }) => {
-  const { initialKeyword } = route.params;
+  const { initialKeyword, filters } = route.params;
   const [keyword, setKeyword] = useState(initialKeyword || '');
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [bookmarkedArticles, setBookmarkedArticles] = useState([]);  // Initialize as empty array
 
+  const isDarkMode = theme === 'dark';
+
   useEffect(() => {
-    searchNews();
-    loadBookmarks();
-  }, []);
+    loadBookmarks()
+    searchNews(); 
+  }, [initialKeyword, filters]);
+
+  // Fetch news from topheadlines endpoit
+  const fetchTopHeadlines = async (category, country, fromDate, toDate) => {
+    const params = new URLSearchParams({
+      apiKey: API_KEY,
+      ...(category && { category }),
+      ...(country && { country }), 
+      ...(keyword && { q: keyword }),
+      ...(fromDate && { from: fromDate }),
+      ...(toDate && { to: toDate }),
+    });
+
+    console.log('Fetching Top Headlines with params:', params.toString());
+
+    try {
+        const response = await axios.get(`https://newsapi.org/v2/top-headlines?${params.toString()}`);
+        return response.data.articles;
+    } catch (err) {
+        console.error('Top Headlines API error:', err);
+        throw err;
+    }
+};
+
+  //Fetch news from everythigendpoint
+  const fetchEverything = async (source, language, fromDate, toDate) => {
+    const params = new URLSearchParams({
+      apiKey: API_KEY,
+      ...(keyword && { q: keyword }), 
+      ...(source && { sources: source }), 
+      ...(language && { language }), 
+      ...(fromDate && { from: fromDate }), 
+      ...(toDate && { to: toDate }), 
+    });
+  
+    try {
+      const response = await axios.get(`https://newsapi.org/v2/everything?${params.toString()}`);
+      return response.data.articles;
+    } catch (err) {
+      console.error('Everything API error:', err);
+      throw err;
+    }
+  };
+
 
   // Load bookmarks from AsyncStorage
   const loadBookmarks = async () => {
@@ -59,24 +104,40 @@ const SearchResultsScreen = ({ route, navigation, theme }) => {
     saveBookmarks(updatedBookmarks);  // Persist bookmarks
   };
 
+  // Search news articles
   const searchNews = async () => {
-    if (!keyword) return;
     setLoading(true);
     setError('');
-    try {
-      const response = await axios.get(
-        `https://newsapi.org/v2/everything?q=${keyword}&apiKey=${API_KEY}`
-      );
-      setArticles(response.data.articles);
-    } catch (err) {
-      console.log(err); // THIS IS WEIRD!! Jos poistan tän logituksen, appi ei toimi. WTF?!
-      setError('Failed to fetch news articles. Try again later.');
-    }
-    setLoading(false);
-  };
 
-  // User's choice for theme
-  const isDarkMode = theme === 'dark';
+    const { filters } = route.params || {};
+    const { category, source, country, language, dateRange } = filters || {};
+    const fromDate = dateRange?.from ? dateRange.from : null;
+    const toDate = dateRange?.to ? dateRange.to : null;
+
+    try {
+        let articles = [];
+
+        // Käytä top-headlines, jos kategoria on valittu, vaikka avainsanaa ei olisi
+        if (category || country) {
+            articles = await fetchTopHeadlines(category, country, fromDate, toDate);
+        } else if (source || language || keyword) {
+            articles = await fetchEverything(source, language, fromDate, toDate);
+        }
+
+        if (articles.length === 0) {
+            setNoResults(true);
+        } else {
+            setArticles(articles);
+        }
+
+    } catch (err) {
+        setError('Failed to fetch news articles. Try again later.');
+        console.error('Error fetching articles:', err);
+    }
+
+    setLoading(false);
+};
+   
 
   return (
     <View style={[styles.container, { backgroundColor: isDarkMode ? '#333' : '#fff' }]}>
@@ -90,7 +151,7 @@ const SearchResultsScreen = ({ route, navigation, theme }) => {
       <Button title="Search" onPress={searchNews} />
 
       {/* Back Button */}
-      <Button title="Back to Home" onPress={() => navigation.goBack()} />
+      <Button title="Back to Home" onPress={() => navigation.navigate('Home')} />
 
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
@@ -133,3 +194,6 @@ const styles = StyleSheet.create({
 });
 
 export default SearchResultsScreen;
+
+
+

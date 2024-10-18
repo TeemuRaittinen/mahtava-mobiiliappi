@@ -53,7 +53,7 @@ const HomeScreen = ({ navigation, theme, setTheme }) => {
   const searchNews = () => {
     if (!keyword) return;
     saveSearch(keyword);
-    navigation.navigate('Search Results', { initialKeyword: keyword });
+    navigation.navigate('Search Results', { initialKeyword: keyword});
     setKeyword('');  // Clearing input field after search
   };
 
@@ -101,6 +101,7 @@ const HomeScreen = ({ navigation, theme, setTheme }) => {
       setShowDropdown(false); // Hiding dropdown if search field is not empty
     }
   };
+
 
   return (
     <TouchableWithoutFeedback onPress={() => setShowDropdown(false)}>
@@ -156,6 +157,13 @@ const HomeScreen = ({ navigation, theme, setTheme }) => {
             </View>
           )}
         </View>
+
+        {/* Button to navigate to filters */}
+        <TouchableOpacity
+          onPress={() => navigation.navigate('FilteredSearch')}
+          style={styles.filterButton}>
+          <Text style={styles.filterButtonText}>Search with Filters</Text>
+        </TouchableOpacity>
 
         {/* Button to navigate to bookmarks */}
         <TouchableOpacity
@@ -232,6 +240,17 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
+  },
+  filterButton:{
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: 'blue',
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+  filterButtonText: {
+    color: 'white',
+    fontSize: 16,
   },
   bookmarkButton: {
     marginTop: 16,
