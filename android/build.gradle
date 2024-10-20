@@ -6,15 +6,22 @@ buildscript {
         targetSdkVersion = 34
         ndkVersion = "26.1.10909125"
         kotlinVersion = "1.9.22"
+        
+        // Define Firebase BOM version here
+        firebaseBomVersion = "31.1.0" // Use the appropriate version based on your Firebase dependencies
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle")
+        // Existing dependencies
+        classpath("com.android.tools.build:gradle:8.1.1") // Add version here for Gradle Plugin
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        
+        // Add this line for the Google services Gradle plugin (Firebase)
+        classpath("com.google.gms:google-services:4.4.2") // Use the latest version if needed
     }
 }
 

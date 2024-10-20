@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
   link: {
     fontSize: 16,
     color: '#007BFF',
+    marginBottom: 8,
   },
 });
 

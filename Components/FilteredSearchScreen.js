@@ -65,7 +65,7 @@ const FilteredSearchScreen = ({ route, theme }) => {
       <Picker
         selectedValue={category}
         onValueChange={(itemValue) => {
-          setCategory(itemValue === 'any' ? null : itemValue); 
+          setCategory(itemValue === 'any' ? null : itemValue);
         }}
         style={{ color: isDarkMode ? '#fff' : '#000' }}
       >
@@ -83,7 +83,7 @@ const FilteredSearchScreen = ({ route, theme }) => {
       <Picker
         selectedValue={source}
         onValueChange={(itemValue) => {
-          setSource(itemValue === 'any' ? null : itemValue); 
+          setSource(itemValue === 'any' ? null : itemValue);
         }}
         style={{ color: isDarkMode ? '#fff' : '#000' }}
       >
@@ -97,7 +97,7 @@ const FilteredSearchScreen = ({ route, theme }) => {
       <Picker
         selectedValue={country}
         onValueChange={(itemValue) => {
-          setCountry(itemValue === 'any' ? null : itemValue); 
+          setCountry(itemValue === 'any' ? null : itemValue);
         }}
         style={{ color: isDarkMode ? '#fff' : '#000' }}
       >
@@ -113,7 +113,7 @@ const FilteredSearchScreen = ({ route, theme }) => {
       <Picker
         selectedValue={language}
         onValueChange={(itemValue) => {
-          setLanguage(itemValue === 'any' ? null : itemValue); 
+          setLanguage(itemValue === 'any' ? null : itemValue);
         }}
         style={{ color: isDarkMode ? '#fff' : '#000' }}
       >
@@ -144,7 +144,7 @@ const FilteredSearchScreen = ({ route, theme }) => {
             if (event.type === 'set' && selectedDate) {
               setDateRange({ ...dateRange, from: selectedDate });
             }
-            setShowFromPicker(false); 
+            setShowFromPicker(false);
           }}
         />
       )}
@@ -167,7 +167,7 @@ const FilteredSearchScreen = ({ route, theme }) => {
             if (event.type === 'set' && selectedDate) {
               setDateRange({ ...dateRange, to: selectedDate });
             }
-            setShowToPicker(false); 
+            setShowToPicker(false);
           }}
         />
       )}
@@ -180,38 +180,38 @@ const FilteredSearchScreen = ({ route, theme }) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10, 
+    padding: 10,
     flex: 1,
   },
   heading: {
-    fontSize: 20, 
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10, 
+    marginBottom: 10,
   },
   input: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 10, 
-    paddingHorizontal: 5, 
+    marginBottom: 10,
+    paddingHorizontal: 5,
     borderRadius: 5,
   },
   filterTitle: {
-    fontSize: 14, 
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#333',
-    marginTop: 10, 
+    marginTop: 10,
   },
   dropdown: {
     height: 40,
     justifyContent: 'center',
-    paddingHorizontal: 5, 
+    paddingHorizontal: 5,
     backgroundColor: '#f0f0f0',
     borderRadius: 5,
-    marginBottom: 10, 
+    marginBottom: 10,
   },
   dropdownText: {
-    fontSize: 12, 
+    fontSize: 12,
     color: '#333',
   },
 });
