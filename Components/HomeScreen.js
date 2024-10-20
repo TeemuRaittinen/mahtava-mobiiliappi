@@ -53,7 +53,7 @@ const HomeScreen = ({ navigation, theme, setTheme }) => {
   const searchNews = () => {
     if (!keyword) return;
     saveSearch(keyword);
-    navigation.navigate('Search Results', { initialKeyword: keyword});
+    navigation.navigate('Search Results', { initialKeyword: keyword });
     setKeyword('');  // Clearing input field after search
   };
 
@@ -102,17 +102,14 @@ const HomeScreen = ({ navigation, theme, setTheme }) => {
     }
   };
 
-
   return (
     <TouchableWithoutFeedback onPress={() => setShowDropdown(false)}>
       <View style={[styles.container, { backgroundColor: isDarkMode ? '#333' : '#fff' }]}>
         <Text style={[styles.heading, { color: isDarkMode ? '#fff' : '#000' }]}>Newsapi-appi</Text>
 
-
         {/* <TouchableOpacity onPress={() => navigation.navigate('Notification Preferences')} style={styles.preferenceButton}>
           <Text style={styles.preferenceButtonText}>Notification Preferences</Text>
         </TouchableOpacity> */}
-
 
         {/* Switch for dark / light theme */}
         <View style={styles.themeSwitchContainer}>
@@ -160,7 +157,7 @@ const HomeScreen = ({ navigation, theme, setTheme }) => {
 
         {/* Button to navigate to filters */}
         <TouchableOpacity
-          onPress={() => navigation.navigate('FilteredSearch')}
+          onPress={() => navigation.navigate('Filtered Search')}
           style={styles.filterButton}>
           <Text style={styles.filterButtonText}>Search with Filters</Text>
         </TouchableOpacity>
@@ -241,10 +238,10 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
   },
-  filterButton:{
+  filterButton: {
     marginTop: 20,
     padding: 10,
-    backgroundColor: 'blue',
+    backgroundColor: '#3498db',
     alignItems: 'center',
     borderRadius: 5,
   },
@@ -262,8 +259,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
-
-
   preferenceButton: {
     marginTop: 16,
     padding: 8,
@@ -274,8 +269,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
-
-
 });
 
 export default HomeScreen;

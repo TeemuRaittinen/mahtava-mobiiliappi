@@ -20,25 +20,25 @@ const getToken = async () => {
 
 export async function requestUserPermission() {
 
-    // try {
-    //     const granted = await PermissionsAndroid.request(
-    //         PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-    //         {
-    //             title: 'Notification Permission',
-    //             message: 'This app needs access to send notifications.',
-    //             buttonNeutral: 'Ask Me Later',
-    //             buttonNegative: 'Cancel',
-    //             buttonPositive: 'OK',
-    //         },
-    //     );
-    //     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-    //         console.log('Notification permission granted');
-    //     } else {
-    //         console.log('Notification permission denied');
-    //     }
-    // } catch (err) {
-    //     console.warn(err);
-    // }
+    try {
+        const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+            {
+                title: 'Notification Permission',
+                message: 'This app needs access to send notifications.',
+                buttonNeutral: 'Ask Me Later',
+                buttonNegative: 'Cancel',
+                buttonPositive: 'OK',
+            },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            console.log('Notification permission granted');
+        } else {
+            console.log('Notification permission denied');
+        }
+    } catch (err) {
+        console.warn(err);
+    }
 
     const authStatus = await messaging().requestPermission();
     const enabled =

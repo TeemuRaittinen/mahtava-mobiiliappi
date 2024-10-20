@@ -4,13 +4,15 @@
 // import { View, Text, StyleSheet, Button } from 'react-native';
 // import CheckBox from '@react-native-community/checkbox';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-// import messaging from '@react-native-firebase/messaging';
+// import messaging from '@react-native-firebase/messaging'
 
 // const topics = [
-//     { id: 'sports', label: 'Sports' },
-//     { id: 'technology', label: 'Technology' },
-//     { id: 'health', label: 'Health' },
-//     { id: 'business', label: 'Business' },
+// { id: 'business', label: 'Business' },
+// { id: 'entertainment', label: 'Entertainment' },
+// { id: 'health', label: 'Health' },
+// { id: 'science', label: 'Science' },
+// { id: 'sports', label: 'Sports' },
+// { id: 'technology', label: 'Technology' },
 // ];
 
 // const NotificationPreferencesScreen = ({ navigation }) => {

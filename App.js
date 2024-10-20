@@ -8,14 +8,9 @@ import PushNotification from 'react-native-push-notification';
 import HomeScreen from './Components/HomeScreen';
 import SearchResultsScreen from './Components/SearchResultsScreen';
 import BookmarksScreen from './Components/BookmarksScreen';
-<<<<<<< HEAD
 // import NotificationPreferencesScreen from './Components/NotificationPreferencesScreen';
-import { requestUserPermission, getToken } from './NotificationService';
-=======
-import PushNotification from 'react-native-push-notification';
+import { requestUserPermission } from './NotificationService';
 import FilteredSearchScreen from './Components/FilteredSearchScreen';
-
->>>>>>> main
 
 enableScreens();
 
@@ -28,9 +23,9 @@ const App = () => {
     // Create a notification channel for Android 8.0+
     PushNotification.createChannel(
       {
-        channelId: 'your-channel-id', // (required)
-        channelName: 'Your Channel Name', // (required)
-        channelDescription: 'A channel to categorise your notifications', // (optional) 
+        channelId: 'Newsapi-channel-id', // (required)
+        channelName: 'Newsapi-appi', // (required)
+        channelDescription: 'Currently for testing only.', // (optional) 
         sound: 'default', // (optional) Sound for notifications
         importance: PushNotification.Importance.HIGH, // (optional) Importance level
         vibrate: true, // (optional) Vibrate on notification
@@ -40,7 +35,6 @@ const App = () => {
 
     // Request notification permission when the app starts
     requestUserPermission().then(() => {
-      getToken();
     });
 
     // Listen for notifications when the app is in the foreground
@@ -49,7 +43,7 @@ const App = () => {
 
       // Display the notification using PushNotification
       PushNotification.localNotification({
-        channelId: 'your-channel-id', // The channel ID created above
+        channelId: 'Newsapi-channel-id', // The channel ID created above
         title: remoteMessage.notification.title, // Title from the FCM message
         message: remoteMessage.notification.body, // Body from the FCM message
         playSound: true,
@@ -69,7 +63,7 @@ const App = () => {
         <Stack.Screen name="Home">
           {props => <HomeScreen {...props} theme={theme} setTheme={setTheme} />}
         </Stack.Screen>
-         <Stack.Screen name="FilteredSearch">
+        <Stack.Screen name="Filtered Search">
           {props => <FilteredSearchScreen {...props} theme={theme} setTheme={setTheme} />}
         </Stack.Screen>
         <Stack.Screen name="Search Results">
@@ -78,12 +72,9 @@ const App = () => {
         <Stack.Screen name="Bookmarks">
           {props => <BookmarksScreen {...props} theme={theme} setTheme={setTheme} />}
         </Stack.Screen>
-<<<<<<< HEAD
         {/* <Stack.Screen name="Notification Preferences">
           {props => <NotificationPreferencesScreen {...props} theme={theme} setTheme={setTheme} />}
         </Stack.Screen> */}
-=======
->>>>>>> main
       </Stack.Navigator>
     </NavigationContainer>
   );
