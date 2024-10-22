@@ -68,6 +68,7 @@ const FilteredSearchScreen = ({ route, theme }) => {
           setCategory(itemValue === 'any' ? null : itemValue);
         }}
         style={{ color: isDarkMode ? '#fff' : '#000' }}
+        dropdownIconColor={isDarkMode ? '#fff' : '#000'} // This changes the arrow color
       >
         <Picker.Item label="All" value="any" />
         <Picker.Item label="Business" value="business" />
@@ -86,6 +87,7 @@ const FilteredSearchScreen = ({ route, theme }) => {
           setSource(itemValue === 'any' ? null : itemValue);
         }}
         style={{ color: isDarkMode ? '#fff' : '#000' }}
+        dropdownIconColor={isDarkMode ? '#fff' : '#000'}
       >
         <Picker.Item label="All Sources" value="any" />
         <Picker.Item label="CNN" value="cnn" />
@@ -100,6 +102,7 @@ const FilteredSearchScreen = ({ route, theme }) => {
           setCountry(itemValue === 'any' ? null : itemValue);
         }}
         style={{ color: isDarkMode ? '#fff' : '#000' }}
+        dropdownIconColor={isDarkMode ? '#fff' : '#000'}
       >
         <Picker.Item label="Any" value="any" />
         <Picker.Item label="USA" value="us" />
@@ -116,6 +119,7 @@ const FilteredSearchScreen = ({ route, theme }) => {
           setLanguage(itemValue === 'any' ? null : itemValue);
         }}
         style={{ color: isDarkMode ? '#fff' : '#000' }}
+        dropdownIconColor={isDarkMode ? '#fff' : '#000'}
       >
         <Picker.Item label="Any" value="any" />
         <Picker.Item label="English" value="en" />
