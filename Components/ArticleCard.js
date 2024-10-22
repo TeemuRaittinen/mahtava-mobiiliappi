@@ -1,26 +1,47 @@
-import React from 'react';
-import { View, Text, Image, Linking, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Button, ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
+import axios from 'axios';
 
 const ArticleCard = ({ article, bookmarkedArticles, toggleBookmark }) => {
-  const handlePress = async (url) => {
+  const [translatedText, setTranslatedText] = useState('');
+  const [loadingTranslation, setLoadingTranslation] = useState(false);
+
+  const translateArticle = async () => {
+    setLoadingTranslation(true);
     try {
-      await Linking.openURL(url);
-    } catch (error) {
-      console.error('Failed to open URL:', error);
+      const response = await axios.post(`https://translation.googleapis.com/language/translate/v2`, {
+        q: article.title + ' ' + article.description,
+        target: 'fi', 
+        key: 'AIzaSyB-PyiQuigDxBTizmHpNlOBXffDvgREVBs',  
+      });
+
+      const translated = response.data.data.translations[0].translatedText;
+      setTranslatedText(translated);
+    } catch (err) {
+      console.error('Translation failed', err);
     }
+    setLoadingTranslation(false);
   };
 
   return (
     <View style={styles.card}>
-      {article.urlToImage ? (
-        <Image source={{ uri: article.urlToImage }} style={styles.image} />
-      ) : null}
       <Text style={styles.title}>{article.title || 'No Title Available'}</Text>
       <Text style={styles.description}>{article.description || 'No description available'}</Text>
 
-      <TouchableOpacity onPress={() => handlePress(article.url)}>
-        <Text style={styles.link}>Read Full Article</Text>
+      {/* Translate button */}
+      <TouchableOpacity onPress={translateArticle} style={styles.translateButton}>
+        <Text style={styles.translateButtonText}>Translate Article</Text>
       </TouchableOpacity>
+
+      {/* Warning about translations */}
+      <Text style={styles.warning}>Warning: Translations may alter the meaning of the article.</Text>
+
+      {/* Display loading or translated text */}
+      {loadingTranslation ? (
+        <ActivityIndicator />
+      ) : translatedText ? (
+        <Text style={styles.translatedText}>{translatedText}</Text>
+      ) : null}
 
       {/* Bookmark Button */}
       <Button
@@ -39,16 +60,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#ddd',
     borderWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
-  },
-  image: {
-    height: 200,
-    borderRadius: 10,
-    marginBottom: 10,
   },
   title: {
     fontSize: 18,
@@ -59,10 +70,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
   },
-  link: {
-    fontSize: 16,
-    color: '#007BFF',
-    marginBottom: 8,
+  warning: {
+    color: 'red',
+    marginVertical: 10,
+  },
+  translatedText: {
+    color: '#555',
+    marginVertical: 10,
+  },
+  translateButton: {
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+  },
+  translateButtonText: {
+    color: 'white',
+    textAlign: 'center',
   },
 });
 
