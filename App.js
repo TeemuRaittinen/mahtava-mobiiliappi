@@ -11,6 +11,9 @@ import BookmarksScreen from './Components/BookmarksScreen';
 // import NotificationPreferencesScreen from './Components/NotificationPreferencesScreen';
 import { requestUserPermission } from './NotificationService';
 import FilteredSearchScreen from './Components/FilteredSearchScreen';
+import RegisterScreen from './Components/RegisterScreen';
+import LoginScreen from './Components/LoginScreen';
+
 
 enableScreens();
 
@@ -71,6 +74,12 @@ const App = () => {
         </Stack.Screen>
         <Stack.Screen name="Bookmarks">
           {props => <BookmarksScreen {...props} theme={theme} setTheme={setTheme} />}
+        </Stack.Screen>
+        <Stack.Screen name="Register">
+          {props => <RegisterScreen {...props} theme={theme} setTheme={setTheme} />}
+        </Stack.Screen>
+        <Stack.Screen name="Login">
+          {props => <LoginScreen {...props} theme={theme} setTheme={setTheme} />}
         </Stack.Screen>
         {/* <Stack.Screen name="Notification Preferences">
           {props => <NotificationPreferencesScreen {...props} theme={theme} setTheme={setTheme} />}
