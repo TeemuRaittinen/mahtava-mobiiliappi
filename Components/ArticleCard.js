@@ -9,11 +9,14 @@ const ArticleCard = ({ article, bookmarkedArticles, toggleBookmark }) => {
   const translateArticle = async () => {
     setLoadingTranslation(true);
     try {
-      const response = await axios.post(`https://translation.googleapis.com/language/translate/v2`, {
-        q: article.title + ' ' + article.description,
-        target: 'fi', 
-        key: 'AIzaSyB-PyiQuigDxBTizmHpNlOBXffDvgREVBs',  
-      });
+      // Pass the API key as a query parameter in the URL
+      const response = await axios.post(
+        `https://translation.googleapis.com/language/translate/v2?key=AIzaSyDJhhnRcr0YazP2xc-14ke0xJ9KBHnZtDY`,
+        {
+          q: article.title + ' ' + article.description,
+          target: 'fi',
+        }
+      );
 
       const translated = response.data.data.translations[0].translatedText;
       setTranslatedText(translated);
@@ -34,7 +37,9 @@ const ArticleCard = ({ article, bookmarkedArticles, toggleBookmark }) => {
       </TouchableOpacity>
 
       {/* Warning about translations */}
-      <Text style={styles.warning}>Warning: Translations may alter the meaning of the article.</Text>
+      <View style={styles.warningBox}>
+        <Text style={styles.warningText}>Warning: Translations may alter the meaning of the article.</Text>
+      </View>
 
       {/* Display loading or translated text */}
       {loadingTranslation ? (
@@ -70,9 +75,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
   },
-  warning: {
-    color: 'red',
+  warningBox: {
+    borderColor: '#FFA500',
+    borderWidth: 1,
+    padding: 10,
+    backgroundColor: '#FFF8E1',
+    borderRadius: 5,
     marginVertical: 10,
+  },
+  warningText: {
+    color: '#ba4a00',
   },
   translatedText: {
     color: '#555',
