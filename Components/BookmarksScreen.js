@@ -6,7 +6,7 @@ import ArticleCard from './ArticleCard';
 const BookmarksScreen = ({ theme }) => {
   const [bookmarkedArticles, setBookmarkedArticles] = useState([]); // Initialize as empty array
 
-  // Determine if dark mode is active
+  // Determine if dark mode is active 
   const isDarkMode = theme === 'dark';
 
   useEffect(() => {

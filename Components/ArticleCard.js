@@ -51,7 +51,7 @@ const ArticleCard = ({ article, bookmarkedArticles, toggleBookmark }) => {
       {/* Bookmark Button */}
       <Button
         title={bookmarkedArticles.some(a => a.url === article.url) ? 'Unbookmark' : 'Bookmark'}
-        onPress={() => toggleBookmark(article)}
+        onPress={() => toggleBookmark(article)} color="#007BFF"
       />
     </View>
   );
