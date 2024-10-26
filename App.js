@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { enableScreens } from 'react-native-screens';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-// import { Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
 import HomeScreen from './Components/HomeScreen';
@@ -13,7 +12,9 @@ import { requestUserPermission } from './NotificationService';
 import FilteredSearchScreen from './Components/FilteredSearchScreen';
 import RegisterScreen from './Components/RegisterScreen';
 import LoginScreen from './Components/LoginScreen';
-
+import SettingsScreen from './Components/SettingsScreen';
+import ChangeEmailScreen from './Components/ChangeEmailScreen';
+import ChangePasswordScreen from './Components/ChangePasswordScreen';
 
 enableScreens();
 
@@ -66,6 +67,9 @@ const App = () => {
         <Stack.Screen name="Home">
           {props => <HomeScreen {...props} theme={theme} setTheme={setTheme} />}
         </Stack.Screen>
+        <Stack.Screen name="Settings">
+          {props => <SettingsScreen {...props} theme={theme} setTheme={setTheme} />}
+        </Stack.Screen>
         <Stack.Screen name="Filtered Search">
           {props => <FilteredSearchScreen {...props} theme={theme} setTheme={setTheme} />}
         </Stack.Screen>
@@ -81,6 +85,12 @@ const App = () => {
         <Stack.Screen name="Login">
           {props => <LoginScreen {...props} theme={theme} setTheme={setTheme} />}
         </Stack.Screen>
+        <Stack.Screen name="Change Email">
+          {props => <ChangeEmailScreen {...props} theme={theme} setTheme={setTheme} />}
+        </Stack.Screen>
+        <Stack.Screen name="Change Password">
+          {props => <ChangePasswordScreen {...props} theme={theme} setTheme={setTheme} />}
+        </Stack.Screen>
         {/* <Stack.Screen name="Notification Preferences">
           {props => <NotificationPreferencesScreen {...props} theme={theme} setTheme={setTheme} />}
         </Stack.Screen> */}
@@ -90,3 +100,4 @@ const App = () => {
 };
 
 export default App;
+

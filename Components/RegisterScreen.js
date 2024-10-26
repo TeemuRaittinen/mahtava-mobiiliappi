@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import auth from '@react-native-firebase/auth';
 
 const RegisterScreen = ({ navigation, route, theme }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState(''); // New state for confirm password
 
   const handleRegister = async () => {
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      Alert.alert('Error', "Passwords don't match!"); // Show alert if passwords don't match
+      return; // Exit the function if they don't match
+    }
+
     try {
       // Käytä auth() rekisteröimiseen
       const userCredential = await auth().createUserWithEmailAndPassword(email, password);
@@ -40,16 +47,29 @@ const RegisterScreen = ({ navigation, route, theme }) => {
         secureTextEntry
         placeholderTextColor={theme === 'dark' ? '#ccc' : '#666'}
       />
-      <Button title="Register" onPress={handleRegister} />
-      <Button
-        title="Already have an account? Login"
-        onPress={() => navigation.navigate('Login')}
+
+      <TextInput
+        style={[styles.input, { color: theme === 'dark' ? '#fff' : '#000', borderColor: theme === 'dark' ? '#555' : '#ccc' }]}
+        value={confirmPassword}
+        onChangeText={setConfirmPassword} // Update confirm password state correctly
+        placeholder="Confirm Password"
+        secureTextEntry
+        placeholderTextColor={theme === 'dark' ? '#ccc' : '#666'}
       />
+
+      {/* Add a little gap between buttons */}
+      <TouchableOpacity style={styles.button} onPress={handleRegister}>
+        <Text style={styles.buttonText}>Register</Text>
+      </TouchableOpacity>
+      <View style={styles.buttonGap} />
+
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.buttonText}>Already have an account? Login</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-// Add styles here
 const styles = StyleSheet.create({
   container: {
     padding: 20,
@@ -67,8 +87,19 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
   },
+  button: {
+    backgroundColor: '#007bff',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
+  },
+  buttonGap: {
+    height: 10,
+  },
 });
 
 export default RegisterScreen;
-
-

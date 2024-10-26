@@ -124,4 +124,7 @@ dependencies {
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 
+// This line is needed for the cog icon to show correctly
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+
 apply plugin: 'com.google.gms.google-services'

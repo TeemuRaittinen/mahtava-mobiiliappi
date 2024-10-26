@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, TouchableWithoutFeedback, Linking, Switch } from 'react-native';
+import { View, Text, TextInput, Button, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, TouchableWithoutFeedback, Linking } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
-import { REACT_APP_NEWS_API_KEY } from '@env';
 
 const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
 
-const HomeScreen = ({ navigation, theme, setTheme }) => {
+const HomeScreen = ({ navigation, theme = 'light', setTheme }) => {  // Added default theme fallback
   const [keyword, setKeyword] = useState(''); // State for search input
   const [trendingArticles, setTrendingArticles] = useState([]); // State for trending articles
   const [loading, setLoading] = useState(false); // State for loading status
@@ -38,13 +38,14 @@ const HomeScreen = ({ navigation, theme, setTheme }) => {
     return () => unsubscribe(); // Clean up subscription on unmount
   };
 
+
   const toggleTheme = async (isDarkMode) => {
     const selectedTheme = isDarkMode ? 'dark' : 'light';
     setTheme(selectedTheme);
   };
 
-  // User's choice for theme
   const isDarkMode = theme === 'dark';
+
 
   // Fetch trending news from API
   const fetchTrendingNews = async () => {
@@ -140,35 +141,30 @@ const HomeScreen = ({ navigation, theme, setTheme }) => {
   return (
     <TouchableWithoutFeedback onPress={() => setShowDropdown(false)}>
       <View style={[styles.container, { backgroundColor: theme === 'dark' ? '#333' : '#fff' }]}>
-        <Text style={[styles.heading, { color: theme === 'dark' ? '#fff' : '#000' }]}>Newsapi-appi</Text>
+        {/* Title and Gear Icon Row */}
+        <View style={styles.titleContainer}>
+          <Text style={[styles.heading, { color: theme === 'dark' ? '#fff' : '#000' }]}>Newsapi-appi</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+            <MaterialIcons name="settings" size={44} color={theme === 'dark' ? '#fff' : '#000'} />
+          </TouchableOpacity>
+        </View>
 
         {/* Authentication Links at the top of the screen */}
         <View style={styles.authLinks}>
           {!isLoggedIn ? ( // Show login/register links if not logged in
             <>
               <TouchableOpacity onPress={login}>
-                <Text style={styles.authLinkText}>Login</Text>
+                <Text style={[styles.authLinkText, { color: theme === 'dark' ? '#fff' : '#0000ff' }]}>Login</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={register}>
-                <Text style={styles.authLinkText}>Register</Text>
+                <Text style={[styles.authLinkText, { color: theme === 'dark' ? '#fff' : '#0000ff' }]}>Register</Text>
               </TouchableOpacity>
             </>
           ) : ( // Show logout button if logged in
             <TouchableOpacity onPress={handleLogout}>
-              <Text style={styles.authLinkText}>Log Out</Text>
+              <Text style={[styles.authLinkText, { color: theme === 'dark' ? '#fff' : '#0000ff' }]}>Log Out</Text>
             </TouchableOpacity>
           )}
-        </View>
-
-        {/* Switch for dark/light theme */}
-        <View style={styles.themeSwitchContainer}>
-          <Text style={{ color: theme === 'dark' ? '#fff' : '#000' }}>
-            {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
-          </Text>
-          <Switch
-            value={theme === 'dark'}
-            onValueChange={toggleTheme}
-          />
         </View>
 
         {/* Search Bar */}
@@ -185,7 +181,10 @@ const HomeScreen = ({ navigation, theme, setTheme }) => {
             placeholderTextColor={theme === 'dark' ? '#CCCCCC' : '#808080'}
             onSubmitEditing={searchNews}
           />
-          <Button title="Search" onPress={searchNews} />
+          {/* Updated Search Button */}
+          <TouchableOpacity style={styles.searchButton} onPress={searchNews}>
+            <Text style={styles.searchButtonText}>Search</Text>
+          </TouchableOpacity>
 
           {/* Dropdown for recent searches */}
           {showDropdown && recentSearches.length > 0 && (
@@ -202,19 +201,15 @@ const HomeScreen = ({ navigation, theme, setTheme }) => {
           )}
         </View>
 
-        {/* Button to navigate to filters */}
+        {/* Button to navigate to filters with added margin */}
         <TouchableOpacity
           onPress={() => navigation.navigate('Filtered Search')}
           style={styles.filterButton}>
           <Text style={styles.filterButtonText}>Search with Filters</Text>
         </TouchableOpacity>
 
-        {/* Button to navigate to bookmarks */}
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Bookmarks')}
-          style={styles.bookmarkButton}>
-          <Text style={styles.bookmarkButtonText}>View Bookmarked Articles</Text>
-        </TouchableOpacity>
+        {/* Add margin to create gap between buttons */}
+        <View style={styles.buttonGap} />
 
         {/* Trending News Section */}
         <Text style={[styles.subheading, { color: theme === 'dark' ? '#fff' : '#000' }]}>Trending News</Text>
@@ -225,7 +220,7 @@ const HomeScreen = ({ navigation, theme, setTheme }) => {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => Linking.openURL(item.url)}>
-              <Text style={[styles.articleTitle, { color: theme === 'dark' ? '#fff' : '#000' }]}>{item.title}</Text>
+              <Text style={[styles.articleTitle, { color: theme === 'dark' ? '#fff' : '#0000ff' }]}>{item.title}</Text>
             </TouchableOpacity>
           )}
         />
@@ -239,40 +234,41 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   heading: {
-    fontSize: 24,
+    fontSize: 36,
     fontWeight: 'bold',
-    marginBottom: 10,
   },
   subheading: {
     fontSize: 20,
+    fontWeight: 'bold',
     marginVertical: 10,
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
+    height: 50,
     borderWidth: 1,
+    marginVertical: 20,
     paddingHorizontal: 10,
-    marginBottom: 10,
   },
   authLinks: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginVertical: 10,
   },
   authLinkText: {
-    color: 'blue',
-    textDecorationLine: 'underline',
+    marginHorizontal: 10,
+    fontSize: 16,
   },
-  themeSwitchContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
+  articleContainer: {
+    paddingVertical: 10,
   },
   dropdown: {
     position: 'absolute',
-    top: 40,
+    top: 60,
     left: 0,
     right: 0,
     zIndex: 1000,
@@ -281,25 +277,28 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   dropdownItem: {
-    padding: 10,
+    padding: 7,
   },
   filterButton: {
-    backgroundColor: 'blue',
-    padding: 10,
-    marginBottom: 10,
+    backgroundColor: '#007bff',
+    padding: 8,
+    marginBottom: 8,
   },
   filterButtonText: {
     color: 'white',
     textAlign: 'center',
   },
-  bookmarkButton: {
-    backgroundColor: 'blue',
-    padding: 10,
+  searchButton: {
+    backgroundColor: '#007bff',
+    padding: 8,
     marginBottom: 10,
   },
-  bookmarkButtonText: {
+  searchButtonText: {
     color: 'white',
     textAlign: 'center',
+  },
+  buttonGap: {
+    height: 2,
   },
   errorText: {
     textAlign: 'center',

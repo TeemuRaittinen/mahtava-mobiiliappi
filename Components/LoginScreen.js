@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import auth from '@react-native-firebase/auth';
 
 const LoginScreen = ({ navigation, route, theme }) => {
@@ -39,16 +39,24 @@ const LoginScreen = ({ navigation, route, theme }) => {
         secureTextEntry
         placeholderTextColor={theme === 'dark' ? '#ccc' : '#666'}
       />
-      <Button title="Login" onPress={handleLogin} />
-      <Button
-        title="Don't have an account? Register"
+
+      {/* Login Button */}
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+      <View style={styles.buttonGap} />
+
+      {/* Register Button */}
+      <TouchableOpacity
+        style={styles.registerButton}
         onPress={() => navigation.navigate('Register')}
-      />
+      >
+        <Text style={styles.buttonText}>Don't have an account? Register</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-// Add styles here
 const styles = StyleSheet.create({
   container: {
     padding: 20,
@@ -65,6 +73,23 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
+  },
+  buttonGap: {
+    height: 15,
+  },
+  loginButton: {
+    backgroundColor: '#007bff',
+    padding: 10,
+    borderRadius: 5,
+  },
+  registerButton: {
+    backgroundColor: '#007bff',
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
   },
 });
 

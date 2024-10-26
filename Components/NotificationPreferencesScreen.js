@@ -1,4 +1,5 @@
-// NOT RELEVANT AT THE MOMENT
+// NOT RELEVANT AT THE MOMENT (ajatuksena oli, että käyttäjä valitsee uutisaiheet joista haluaa
+// notifikaatioita (automaatiolla), tämä toiminnallisuus ei ollut tällä aikataululla toteutettavissa)
 
 // import React, { useState } from 'react';
 // import { View, Text, StyleSheet, Button } from 'react-native';

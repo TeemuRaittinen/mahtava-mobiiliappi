@@ -3,7 +3,6 @@ import { View, Text, TextInput, FlatList, ActivityIndicator, StyleSheet, Button 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import ArticleCard from './ArticleCard';
-import { REACT_APP_NEWS_API_KEY } from '@env';
 
 const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
 
@@ -19,15 +18,15 @@ const SearchResultsScreen = ({ route, navigation, theme }) => {
 
   useEffect(() => {
     loadBookmarks()
-    searchNews(); 
+    searchNews();
   }, [initialKeyword, filters]);
 
-  // Fetch news from topheadlines endpoit
+  // Fetch news from topheadlines endpoint
   const fetchTopHeadlines = async (category, country, fromDate, toDate) => {
     const params = new URLSearchParams({
       apiKey: API_KEY,
       ...(category && { category }),
-      ...(country && { country }), 
+      ...(country && { country }),
       ...(keyword && { q: keyword }),
       ...(fromDate && { from: fromDate }),
       ...(toDate && { to: toDate }),
@@ -36,25 +35,25 @@ const SearchResultsScreen = ({ route, navigation, theme }) => {
     console.log('Fetching Top Headlines with params:', params.toString());
 
     try {
-        const response = await axios.get(`https://newsapi.org/v2/top-headlines?${params.toString()}`);
-        return response.data.articles;
+      const response = await axios.get(`https://newsapi.org/v2/top-headlines?${params.toString()}`);
+      return response.data.articles;
     } catch (err) {
-        console.error('Top Headlines API error:', err);
-        throw err;
+      console.error('Top Headlines API error:', err);
+      throw err;
     }
-};
+  };
 
-  //Fetch news from everythigendpoint
+  //Fetch news from everything endpoint
   const fetchEverything = async (source, language, fromDate, toDate) => {
     const params = new URLSearchParams({
       apiKey: API_KEY,
-      ...(keyword && { q: keyword }), 
-      ...(source && { sources: source }), 
-      ...(language && { language }), 
-      ...(fromDate && { from: fromDate }), 
-      ...(toDate && { to: toDate }), 
+      ...(keyword && { q: keyword }),
+      ...(source && { sources: source }),
+      ...(language && { language }),
+      ...(fromDate && { from: fromDate }),
+      ...(toDate && { to: toDate }),
     });
-  
+
     try {
       const response = await axios.get(`https://newsapi.org/v2/everything?${params.toString()}`);
       return response.data.articles;
@@ -115,29 +114,28 @@ const SearchResultsScreen = ({ route, navigation, theme }) => {
     const toDate = dateRange?.to ? dateRange.to : null;
 
     try {
-        let articles = [];
+      let articles = [];
 
-        // Käytä top-headlines, jos kategoria on valittu, vaikka avainsanaa ei olisi
-        if (category || country) {
-            articles = await fetchTopHeadlines(category, country, fromDate, toDate);
-        } else if (source || language || keyword) {
-            articles = await fetchEverything(source, language, fromDate, toDate);
-        }
+      // Käytä top-headlines, jos kategoria on valittu, vaikka avainsanaa ei olisi
+      if (category || country) {
+        articles = await fetchTopHeadlines(category, country, fromDate, toDate);
+      } else if (source || language || keyword) {
+        articles = await fetchEverything(source, language, fromDate, toDate);
+      }
 
-        if (articles.length === 0) {
-            setNoResults(true);
-        } else {
-            setArticles(articles);
-        }
+      if (articles.length === 0) {
+        setNoResults(true);
+      } else {
+        setArticles(articles);
+      }
 
     } catch (err) {
-        setError('Failed to fetch news articles. Try again later.');
-        console.error('Error fetching articles:', err);
+      setError('Failed to fetch news articles. Try again later.');
+      console.error('Error fetching articles:', err);
     }
 
     setLoading(false);
-};
-   
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: isDarkMode ? '#333' : '#fff' }]}>
@@ -148,10 +146,17 @@ const SearchResultsScreen = ({ route, navigation, theme }) => {
         placeholder="Search for news..."
         onSubmitEditing={searchNews}
       />
-      <Button title="Search" onPress={searchNews} />
+      <Button
+        title="Search" onPress={searchNews} color="#007bff"
+      />
+
+      <View style={styles.buttonGap} />
 
       {/* Back Button */}
-      <Button title="Back to Home" onPress={() => navigation.navigate('Home')} />
+      <Button
+        title="Back to Home" onPress={() => navigation.navigate('Home')} color="#007bff"
+      />
+      <View style={styles.buttonGap} />
 
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
@@ -190,6 +195,9 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     marginTop: 10,
+  },
+  buttonGap: {
+    height: 10,
   },
 });
 
