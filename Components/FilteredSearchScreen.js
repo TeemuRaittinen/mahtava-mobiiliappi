@@ -177,7 +177,7 @@ const FilteredSearchScreen = ({ route, theme }) => {
       )}
 
       {/* Search Button */}
-      <Button title="Search" onPress={handleSearchWithFilters} />
+      <Button title="Search" onPress={handleSearchWithFilters} color="#007BFF" />
     </View>
   );
 };
@@ -212,6 +212,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     backgroundColor: '#f0f0f0',
     borderRadius: 5,
+    marginTop: 6,
     marginBottom: 10,
   },
   dropdownText: {

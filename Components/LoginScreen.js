@@ -42,7 +42,7 @@ const LoginScreen = ({ navigation, route, theme }) => {
 
       {/* Login Button */}
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
+        <Text style={styles.buttonText}>LOGIN</Text>
       </TouchableOpacity>
       <View style={styles.buttonGap} />
 
@@ -51,7 +51,7 @@ const LoginScreen = ({ navigation, route, theme }) => {
         style={styles.registerButton}
         onPress={() => navigation.navigate('Register')}
       >
-        <Text style={styles.buttonText}>Don't have an account? Register</Text>
+        <Text style={styles.buttonText}>DON'T HAVE AN ACCOUNT? REGISTER</Text>
       </TouchableOpacity>
     </View>
   );
@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 24,
+    fontWeight: "bold",
     marginBottom: 20,
     textAlign: 'center',
   },

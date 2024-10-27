@@ -33,7 +33,7 @@ const ArticleCard = ({ article, bookmarkedArticles, toggleBookmark }) => {
 
       {/* Translate button */}
       <TouchableOpacity onPress={translateArticle} style={styles.translateButton}>
-        <Text style={styles.translateButtonText}>Translate Article</Text>
+        <Text style={styles.translateButtonText}>TRANSLATE ARTICLE</Text>
       </TouchableOpacity>
 
       {/* Warning about translations */}

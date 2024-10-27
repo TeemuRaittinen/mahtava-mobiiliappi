@@ -183,7 +183,7 @@ const HomeScreen = ({ navigation, theme = 'light', setTheme }) => {  // Added de
           />
           {/* Updated Search Button */}
           <TouchableOpacity style={styles.searchButton} onPress={searchNews}>
-            <Text style={styles.searchButtonText}>Search</Text>
+            <Text style={styles.searchButtonText}>SEARCH</Text>
           </TouchableOpacity>
 
           {/* Dropdown for recent searches */}
@@ -205,7 +205,7 @@ const HomeScreen = ({ navigation, theme = 'light', setTheme }) => {  // Added de
         <TouchableOpacity
           onPress={() => navigation.navigate('Filtered Search')}
           style={styles.filterButton}>
-          <Text style={styles.filterButtonText}>Search with Filters</Text>
+          <Text style={styles.filterButtonText}>SEARCH WITH FILTERS</Text>
         </TouchableOpacity>
 
         {/* Add margin to create gap between buttons */}

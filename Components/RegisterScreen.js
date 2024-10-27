@@ -59,12 +59,12 @@ const RegisterScreen = ({ navigation, route, theme }) => {
 
       {/* Add a little gap between buttons */}
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Register</Text>
+        <Text style={styles.buttonText}>REGISTER</Text>
       </TouchableOpacity>
       <View style={styles.buttonGap} />
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.buttonText}>Already have an account? Login</Text>
+        <Text style={styles.buttonText}>ALREADY HAVE AN ACCOUNT? LOGIN</Text>
       </TouchableOpacity>
     </View>
   );
@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 24,
+    fontWeight: "bold",
     marginBottom: 20,
     textAlign: 'center',
   },
