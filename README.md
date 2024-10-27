@@ -1,79 +1,60 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Newsapi-appi 
 
-# Getting Started
+Contributors: Tanja Eriksson, Erja Pisilä, Teemu Raittinen 
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+=== Description === 
 
-## Step 1: Start the Metro Server
+Newsapi-appi is a mobile news application that allows users to search, translate, and bookmark their favorite articles. Designed with a user-friendly interface, this README file provides instructions for setting up and using the project.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+=== Features === 
 
-To start Metro, run the following command from the _root_ of your React Native project:
+Search and Filter: Quickly search for articles using keywords, apply filters, and view results across categories and languages.
+Bookmarking: Save articles for easy access and offline reading.
+Translation: Instantly translate article content with a single tap.
+Dark Mode Support: Switch between light and dark themes for optimal viewing.
 
-```bash
-# using npm
-npm start
+=== Technologies Used === 
 
-# OR using Yarn
-yarn start
-```
+React Native: Cross-platform mobile app framework
+Axios: API requests to fetch and translate article content
+Firebase Authentication: User authentication and password management
+Google Translate API: Translation of article content
+dotenv: Environment variable management 
 
-## Step 2: Start your Application
+=== Installation === 
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+Clone the project repository:   
+git clone [repository link]
+cd project-folder 
 
-### For Android
+Install dependencies: 
+npm install 
 
-```bash
-# using npm
-npm run android
+Set Up Environment Variables: 
+Create a .env file in the root directory of the project and add the necessary environment 	variables. Make sure to define all required information, such as API keys and connection strings. 
 
-# OR using Yarn
-yarn android
-```
+Start the application by running: 
+npm start 
 
-### For iOS
+Run on a Specific Platform:
+For Android: npm run android / npx react-native run-android
+For iOS: npm run ios / npx react-native run-ios
 
-```bash
-# using npm
-npm run ios
+The application should now be available in your local environment. 
 
-# OR using Yarn
-yarn ios
-```
+=== Usage === 
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+Once the application is running, you can access it on an emulator or physical device. Use the following features:
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+Search: Search for articles by keywords or by search filters.
+Bookmark: Save articles to read later.
+Translate: Tap "Translate" to view articles in your preferred language.
+Theme Switch: Toggle between light and dark mode in settings.
 
-## Step 3: Modifying your App
+== Credits == 
 
-Now that you have successfully run the app, let's modify it.
+Erja Pisilä – Developer and Readme author 
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+=== License === 
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+All rights reserved.
