@@ -3,12 +3,18 @@ import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity } from 'reac
 import auth from '@react-native-firebase/auth';
 
 const ChangeEmailScreen = ({ theme }) => {
+    const [oldEmail, setOldEmail] = useState('');
     const [newEmail, setNewEmail] = useState('');
 
     const handleChangeEmail = async () => {
         const user = auth().currentUser;
 
         try {
+            // Re-authenticate the user using the old email
+            const credential = auth.EmailAuthProvider.credential(user.email, oldEmail);
+            await user.reauthenticateWithCredential(credential); // Re-authenticate
+
+            // Update the email
             await user.updateEmail(newEmail);
             Alert.alert('Email changed successfully');
         } catch (error) {
@@ -19,6 +25,25 @@ const ChangeEmailScreen = ({ theme }) => {
     return (
         <View style={[styles.container, { backgroundColor: theme === 'dark' ? '#333' : '#fff' }]}>
             <Text style={[styles.heading, { color: theme === 'dark' ? '#fff' : '#000' }]}>Change Email</Text>
+
+            {/* Input for old email */}
+            <TextInput
+                style={[
+                    styles.input,
+                    {
+                        borderColor: theme === 'dark' ? '#555' : '#ccc',
+                        color: theme === 'dark' ? '#fff' : '#000',
+                    },
+                ]}
+                value={oldEmail}
+                onChangeText={setOldEmail}
+                placeholder="Old Email"
+                placeholderTextColor={theme === 'dark' ? '#ccc' : '#888'}
+                keyboardType="email-address"
+                autoCapitalize="none"
+            />
+
+            {/* Input for new email */}
             <TextInput
                 style={[
                     styles.input,
@@ -35,7 +60,7 @@ const ChangeEmailScreen = ({ theme }) => {
                 autoCapitalize="none"
             />
             <TouchableOpacity style={styles.button} onPress={handleChangeEmail}>
-                <Text style={styles.buttonText}>Change Email</Text>
+                <Text style={styles.buttonText}>CHANGE EMAIL</Text>
             </TouchableOpacity>
         </View>
     );
@@ -47,8 +72,9 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     heading: {
-        fontSize: 24,
-        marginBottom: 20,
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
     },
     input: {
         borderWidth: 1,

@@ -24,7 +24,7 @@ const SettingsScreen = ({ theme, setTheme, navigation }) => {
 
             {/* View Bookmarked Articles Button */}
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Bookmarks')}>
-                <Text style={styles.buttonText}>View Bookmarked Articles</Text>
+                <Text style={styles.buttonText}>VIEW BOOKMARKED ARTICLES</Text>
             </TouchableOpacity>
 
             {/* Account Settings Section */}
@@ -34,13 +34,13 @@ const SettingsScreen = ({ theme, setTheme, navigation }) => {
 
             {/* Change Email Button */}
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Change Email')}>
-                <Text style={styles.buttonText}>Change Email</Text>
+                <Text style={styles.buttonText}>CHANGE EMAIL</Text>
             </TouchableOpacity>
             <View style={styles.buttonGap} />
 
             {/* Change Password Button */}
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Change Password')}>
-                <Text style={styles.buttonText}>Change Password</Text>
+                <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
             </TouchableOpacity>
         </View>
     );
@@ -52,13 +52,15 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     heading: {
-        fontSize: 24,
-        marginBottom: 20,
+        fontSize: 20,
+        fontWeight: "bold",
+        marginBottom: 16,
     },
     subHeading: {
         fontSize: 18,
+        fontWeight: "bold",
         marginVertical: 10,
-        marginBottom: 12,
+        marginBottom: 14,
     },
     settingRow: {
         flexDirection: 'row',

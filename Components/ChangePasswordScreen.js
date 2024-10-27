@@ -59,7 +59,7 @@ const ChangePasswordScreen = ({ theme }) => {
             />
 
             <TouchableOpacity style={styles.button} onPress={handleChangePassword}>
-                <Text style={styles.buttonText}>Change Password</Text>
+                <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
             </TouchableOpacity>
         </View>
     );
@@ -71,8 +71,9 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     heading: {
-        fontSize: 24,
-        marginBottom: 20,
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
     },
     input: {
         borderWidth: 1,
