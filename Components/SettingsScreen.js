@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Switch, StyleSheet, TouchableOpacity } from 'react-native';
 
 const SettingsScreen = ({ theme, setTheme, navigation }) => {
+
     const toggleTheme = (isDarkMode) => {
         const selectedTheme = isDarkMode ? 'dark' : 'light';
         setTheme(selectedTheme);
     };
 
+
     return (
         <View style={[styles.container, { backgroundColor: theme === 'dark' ? '#333' : '#fff' }]}>
             <Text style={[styles.heading, { color: theme === 'dark' ? '#fff' : '#000' }]}>Settings</Text>
 
-            {/* Dark/Light Mode Toggle */}
             <View style={styles.settingRow}>
                 <Text style={{ color: theme === 'dark' ? '#fff' : '#000' }}>
                     {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
@@ -22,23 +23,24 @@ const SettingsScreen = ({ theme, setTheme, navigation }) => {
                 />
             </View>
 
-            {/* View Bookmarked Articles Button */}
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Bookmarks')}>
                 <Text style={styles.buttonText}>VIEW BOOKMARKED ARTICLES</Text>
             </TouchableOpacity>
 
-            {/* Account Settings Section */}
+            {/* Button to open Saved Articles screen */}
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Saved Articles')}>
+                <Text style={styles.buttonText}>VIEW SAVED ARTICLES</Text>
+            </TouchableOpacity>
+           
             <Text style={[styles.subHeading, { color: theme === 'dark' ? '#fff' : '#000', marginTop: 20 }]}>
                 Account Settings:
             </Text>
 
-            {/* Change Email Button */}
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Change Email')}>
                 <Text style={styles.buttonText}>CHANGE EMAIL</Text>
             </TouchableOpacity>
             <View style={styles.buttonGap} />
 
-            {/* Change Password Button */}
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Change Password')}>
                 <Text style={styles.buttonText}>CHANGE PASSWORD</Text>
             </TouchableOpacity>

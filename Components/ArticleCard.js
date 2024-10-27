@@ -1,23 +1,35 @@
-import React, { useState } from 'react';
-import { View, Text, Button, ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button, ActivityIndicator, StyleSheet, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
 import axios from 'axios';
+import { saveArticle, addComment } from './SQLiteService';
+import auth from '@react-native-firebase/auth';
 
 const ArticleCard = ({ article, bookmarkedArticles, toggleBookmark }) => {
   const [translatedText, setTranslatedText] = useState('');
   const [loadingTranslation, setLoadingTranslation] = useState(false);
+  const [comment, setComment] = useState('');
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged(user => {
+      setIsLoggedIn(!!user); // Päivitetään kirjautumistila
+    });
+
+    // Puhdistetaan tilat, kun komponentti purkautuu
+    return () => unsubscribe();
+  }, []); // Tyhjät riippuvuudet, jotta effect ajetaan vain kerran
 
   const translateArticle = async () => {
     setLoadingTranslation(true);
     try {
-      // Pass the API key as a query parameter in the URL
       const response = await axios.post(
-        `https://translation.googleapis.com/language/translate/v2?key=AIzaSyDJhhnRcr0YazP2xc-14ke0xJ9KBHnZtDY`,
+        'https://translation.googleapis.com/language/translate/v2?key=AIzaSyDJhhnRcr0YazP2xc-14ke0xJ9KBHnZtDY', 
         {
           q: article.title + ' ' + article.description,
           target: 'fi',
         }
       );
-
       const translated = response.data.data.translations[0].translatedText;
       setTranslatedText(translated);
     } catch (err) {
@@ -26,33 +38,84 @@ const ArticleCard = ({ article, bookmarkedArticles, toggleBookmark }) => {
     setLoadingTranslation(false);
   };
 
+  const handleSaveArticle = () => {
+    if (!isLoggedIn) {
+      Alert.alert('You must be logged in to save articles.'); // Ilmoita käyttäjälle
+      return;
+    }
+    setModalVisible(true);
+  };
+
+  const handleModalSave = () => {
+    // Tallenna artikkeli tietokantaan
+    saveArticle(article.title, article.description, article.content, (newArticleId) => {
+      console.log('Article saved with ID:', newArticleId);
+
+      // Lisää kommentti, jos kentässä on tekstiä
+      if (comment.trim() !== "") {
+        addComment(newArticleId, comment, () => {
+          console.log('Comment added:', comment);
+          setComment('');
+        });
+      }
+
+      setModalVisible(false);  // Sulje modal
+    });
+  };
+
   return (
     <View style={styles.card}>
       <Text style={styles.title}>{article.title || 'No Title Available'}</Text>
       <Text style={styles.description}>{article.description || 'No description available'}</Text>
 
-      {/* Translate button */}
       <TouchableOpacity onPress={translateArticle} style={styles.translateButton}>
         <Text style={styles.translateButtonText}>TRANSLATE ARTICLE</Text>
       </TouchableOpacity>
 
-      {/* Warning about translations */}
       <View style={styles.warningBox}>
         <Text style={styles.warningText}>Warning: Translations may alter the meaning of the article.</Text>
       </View>
 
-      {/* Display loading or translated text */}
       {loadingTranslation ? (
         <ActivityIndicator />
       ) : translatedText ? (
         <Text style={styles.translatedText}>{translatedText}</Text>
       ) : null}
 
-      {/* Bookmark Button */}
+      <Button title="Save Article" onPress={handleSaveArticle} color="#007BFF" />
+      
+      {/* Bookmark */}
       <Button
-        title={bookmarkedArticles.some(a => a.url === article.url) ? 'Unbookmark' : 'Bookmark'}
-        onPress={() => toggleBookmark(article)} color="#007BFF"
+        title={bookmarkedArticles.some(a => a.url === article.url) ? 'UnBookmark' : 'Bookmark'}
+        onPress={() => toggleBookmark(article)}
+        color="#007BFF"
       />
+
+      {/* Modal kommenttia varten */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Add a Comment (Optional)</Text>
+            <TextInput
+              style={styles.commentInput}
+              placeholder="Write a comment here"
+              value={comment}
+              onChangeText={setComment}
+            />
+            <View style={styles.modalButtonContainer}>
+              <Button title="Save" onPress={handleModalSave} color="#007BFF" />
+              <Button title="Cancel" onPress={() => setModalVisible(false)} color="#007BFF" />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -98,6 +161,37 @@ const styles = StyleSheet.create({
   translateButtonText: {
     color: 'white',
     textAlign: 'center',
+  },
+  commentInput: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    padding: 8,
+    marginTop: 10,
+    borderRadius: 5,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
   },
 });
 
