@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
+import { initializeDatabase } from './Components/SQLiteService';
 import HomeScreen from './Components/HomeScreen';
 import SearchResultsScreen from './Components/SearchResultsScreen';
 import BookmarksScreen from './Components/BookmarksScreen';
@@ -15,6 +16,7 @@ import LoginScreen from './Components/LoginScreen';
 import SettingsScreen from './Components/SettingsScreen';
 import ChangeEmailScreen from './Components/ChangeEmailScreen';
 import ChangePasswordScreen from './Components/ChangePasswordScreen';
+import SavedArticlesScreen from './Components/SavedArticlesScreen';
 
 enableScreens();
 
@@ -24,6 +26,10 @@ const App = () => {
   const [theme, setTheme] = useState();
 
   useEffect(() => {
+
+    //initializa SQLiteDB
+    initializeDatabase();
+    
     // Create a notification channel for Android 8.0+
     PushNotification.createChannel(
       {
@@ -90,6 +96,9 @@ const App = () => {
         </Stack.Screen>
         <Stack.Screen name="Change Password">
           {props => <ChangePasswordScreen {...props} theme={theme} setTheme={setTheme} />}
+        </Stack.Screen>
+        <Stack.Screen name="Saved Articles">
+          {props => <SavedArticlesScreen {...props} theme={theme} setTheme={setTheme} />}
         </Stack.Screen>
         {/* <Stack.Screen name="Notification Preferences">
           {props => <NotificationPreferencesScreen {...props} theme={theme} setTheme={setTheme} />}
