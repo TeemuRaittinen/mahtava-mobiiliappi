@@ -1,13 +1,13 @@
 import SQLite from 'react-native-sqlite-storage';
 
-// Avaa SQLite-tietokanta (luo uuden, jos sitä ei ole)
+// Open SQLite
 const db = SQLite.openDatabase(
   { name: 'articles.db', location: 'default' },
   () => console.log("Database opened successfully"),
   error => console.error("Error opening database:", error)
 );
 
-// Alustetaan taulut
+// initialize
 export const initializeDatabase = () => {
   db.transaction(tx => {
     tx.executeSql(
@@ -36,32 +36,32 @@ export const initializeDatabase = () => {
   });
 };
 
-// Function to check if an article is saved
+// Check if an article is saved
 export const isArticleSaved = (title, callback) => {
   db.transaction(tx => {
     tx.executeSql(
       'SELECT * FROM articles WHERE title = ?',
       [title],
       (_, result) => {
-        callback(result.rows.length > 0); // Call the callback with true if the article is found
+        callback(result.rows.length > 0); 
       },
       (_, error) => {
         console.error('Error checking saved article', error);
-        callback(false); // In case of error, call with false
+        callback(false); 
       }
     );
   });
 };
 
 
-// Lisää uusi artikkeli
+//Add new article
 export const saveArticle = (title, description, content, callback) => {
   db.transaction(tx => {
     tx.executeSql(
       'INSERT INTO articles (title, description, content) VALUES (?, ?, ?);',
       [title, description, content],
       (_, result) => {
-        callback(result.insertId); // Palauttaa uuden artikkelin ID
+        callback(result.insertId);
       },
       (_, error) => {
         console.error("Failed to save article:", error);
@@ -70,7 +70,7 @@ export const saveArticle = (title, description, content, callback) => {
   });
 };
 
-// Lisää kommentti artikkeliin
+// Add comment
 export const addComment = (articleId, commentText, callback) => {
   db.transaction(tx => {
     tx.executeSql(
@@ -86,7 +86,7 @@ export const addComment = (articleId, commentText, callback) => {
   });
 };
 
-// Hae tallennetut artikkelit ja niiden kommentit
+// Fetch saved articles and comments
 export const getSavedArticles = () => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
@@ -96,7 +96,7 @@ export const getSavedArticles = () => {
          LEFT JOIN comments ON articles.id = comments.articleId;`,
         [],
         (_, { rows }) => {
-          resolve(rows.raw()); // Palauttaa artikkelit ja kommentit
+          resolve(rows.raw()); 
         },
         (_, error) => {
           console.error("Failed to retrieve saved articles:", error);
@@ -107,7 +107,7 @@ export const getSavedArticles = () => {
   });
 };
 
-// Päivitä kommentti
+// Update comment
 export const updateComment = (commentId, newText, callback) => {
   db.transaction(tx => {
     tx.executeSql(
@@ -123,7 +123,7 @@ export const updateComment = (commentId, newText, callback) => {
   });
 };
 
-// Poista artikkeli ja siihen liittyvät kommentit
+// Delete article and comment
 export const deleteArticle = (articleId, callback) => {
   db.transaction(tx => {
     tx.executeSql(
@@ -139,7 +139,7 @@ export const deleteArticle = (articleId, callback) => {
   });
 };
 
-// Poista kommentti
+// Delete comment
 export const deleteComment = (commentId, callback) => {
   db.transaction(tx => {
     tx.executeSql(
