@@ -13,12 +13,12 @@ const ArticleCard = ({ article, bookmarkedArticles, toggleBookmark }) => {
 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(user => {
-      setIsLoggedIn(!!user); // Päivitetään kirjautumistila
+      setIsLoggedIn(!!user); 
     });
 
-    // Puhdistetaan tilat, kun komponentti purkautuu
+   
     return () => unsubscribe();
-  }, []); // Tyhjät riippuvuudet, jotta effect ajetaan vain kerran
+  }, []); 
 
   const translateArticle = async () => {
     setLoadingTranslation(true);
@@ -40,18 +40,18 @@ const ArticleCard = ({ article, bookmarkedArticles, toggleBookmark }) => {
 
   const handleSaveArticle = () => {
     if (!isLoggedIn) {
-      Alert.alert('You must be logged in to save articles.'); // Ilmoita käyttäjälle
+      Alert.alert('You must be logged in to save articles.'); 
       return;
     }
     setModalVisible(true);
   };
 
   const handleModalSave = () => {
-    // Tallenna artikkeli tietokantaan
+    //save to db
     saveArticle(article.title, article.description, article.content, (newArticleId) => {
       console.log('Article saved with ID:', newArticleId);
 
-      // Lisää kommentti, jos kentässä on tekstiä
+      // Add comment
       if (comment.trim() !== "") {
         addComment(newArticleId, comment, () => {
           console.log('Comment added:', comment);
@@ -59,7 +59,7 @@ const ArticleCard = ({ article, bookmarkedArticles, toggleBookmark }) => {
         });
       }
 
-      setModalVisible(false);  // Sulje modal
+      setModalVisible(false);  
     });
   };
 
